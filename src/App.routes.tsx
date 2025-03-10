@@ -7,6 +7,7 @@ const SignUpPage = lazy(() => import("./pages/signup"));
 const Dashboard = lazy(() => import("./pages/dashboard"));
 const EmergencyGuides = lazy(() => import("./pages/guides"));
 const AlertSystem = lazy(() => import("./pages/alerts"));
+const NewsPage = lazy(() => import("./pages/news"));
 
 const routes = [
   {
@@ -36,6 +37,10 @@ const routes = [
   {
     path: "/alerts",
     element: <AlertSystem />,
+  },
+  {
+    path: "/news",
+    element: <NewsPage />,
   },
 ];
 

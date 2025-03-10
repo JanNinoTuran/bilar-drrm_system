@@ -12,6 +12,7 @@ const Dashboard = lazy(() => import("./pages/dashboard"));
 const EmergencyGuides = lazy(() => import("./pages/guides"));
 const AlertSystem = lazy(() => import("./pages/alerts"));
 const InventoryPage = lazy(() => import("./pages/inventory"));
+const NewsPage = lazy(() => import("./pages/news"));
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
             <Route path="/guides" element={<EmergencyGuides />} />
             <Route path="/alerts" element={<AlertSystem />} />
             <Route path="/inventory" element={<InventoryPage />} />
+            <Route path="/news" element={<NewsPage />} />
 
             {/* For Tempo routes */}
             {import.meta.env.VITE_TEMPO && <Route path="/tempobook/*" />}

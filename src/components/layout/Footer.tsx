@@ -1,6 +1,12 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import bilar from "@/components/images/bilar.png";
+import bisu from "@/components/images/BISU_BILAR.png";
+import comsoc from "@/components/images/COMSOC.png";
+import cot from "@/components/images/COT.png";
+import dev from "@/components/images/Dev.png";
+import drrm from "@/components/images/drrm.png";
 import { cn } from "@/lib/utils";
 import {
   Facebook,
@@ -252,32 +258,32 @@ const Footer = ({ className }: FooterProps = {}) => {
             </h4>
             <div className="flex flex-wrap justify-center gap-6 items-center">
               <img
-                src="@/components/images/drrm.png"
+                src={drrm}
                 alt="DRRM Logo"
                 className="h-12 w-auto grayscale hover:grayscale-0 transition-all"
               />
               <img
-                src="@/components/images/bilar.png"
+                src={bilar}
                 alt="BilarLogo"
                 className="h-12 w-auto grayscale hover:grayscale-0 transition-all"
               />
               <img
-                src="@/components/images/BISU_BILAR.png"
+                src={bisu}
                 alt="BISU"
                 className="h-12 w-auto grayscale hover:grayscale-0 transition-all"
               />
               <img
-                src="@/components/images/Dev.png"
+                src={dev}
                 alt="FullStackMasters"
                 className="h-12 w-auto grayscale hover:grayscale-0 transition-all"
               />
               <img
-                src="@/components/images/COT.png"
+                src={cot}
                 alt="COT"
                 className="h-12 w-auto grayscale hover:grayscale-0 transition-all"
               />
               <img
-                src="@/components/images/COMSOC.png"
+                src={comsoc}
                 alt="COMSOC"
                 className="h-12 w-auto grayscale hover:grayscale-0 transition-all"
               />

@@ -4,6 +4,7 @@ import HeroSection from "./home/HeroSection";
 import FeatureGrid from "./home/FeatureGrid";
 import AlertsWidget from "./alerts/AlertsWidget";
 import MapPreview from "./map/MapPreview";
+import DRRMNewsSection from "./home/DRRMNewsSection";
 import EmergencyContactsWidget from "./resources/EmergencyContactsWidget";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -82,17 +83,21 @@ const Home: React.FC = () => {
         <section className="py-12">
           <FeatureGrid />
         </section>
-        {/* Community Preparedness Section */}
-        <section className="py-12 bg-gradient-to-r from-blue-50 to-indigo-50">
+
+        {/* DRRM News Section - New interactive section that appears on scroll */}
+        <DRRMNewsSection />
+
+        {/* Alert Information Section */}
+        <section className="py-12">
           <div className="container mx-auto px-4">
             <h2 className="text-2xl font-bold mb-8 text-center">
-              Community Preparedness
+              Stay Informed & Prepared
             </h2>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="bg-white p-6 rounded-lg shadow-md">
                 <h3 className="text-xl font-semibold mb-4 flex items-center">
                   <MapPin className="h-5 w-5 text-blue-600 mr-2" />
-                  Disaster Awareness Map
+                  Interactive Disaster Map
                 </h3>
                 <p className="text-gray-600 mb-4">
                   Access our interactive map to view evacuation routes, safe
@@ -103,17 +108,18 @@ const Home: React.FC = () => {
               <div className="bg-white p-6 rounded-lg shadow-md">
                 <h3 className="text-xl font-semibold mb-4 flex items-center">
                   <Bell className="h-5 w-5 text-red-600 mr-2" />
-                  Stay Informed
+                  Active Alerts
                 </h3>
                 <p className="text-gray-600 mb-4">
                   Get timely alerts and updates about potential hazards and
-                  emergency situations.
+                  emergency situations in your area.
                 </p>
                 <AlertsWidget />
               </div>
             </div>
           </div>
         </section>
+
         {/* Emergency Contacts Section */}
         <section className="py-12">
           <div className="container mx-auto px-4">
@@ -123,6 +129,7 @@ const Home: React.FC = () => {
             <EmergencyContactsWidget />
           </div>
         </section>
+
         {/* Call to Action Section */}
         <section className="py-2 bg-blue-600 text-white">
           <div className="container mx-auto px-4 text-center">

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import ligtasLogo from "@/components/images/Ligtas.png";
 import {
   NavigationMenu,
   NavigationMenuList,
@@ -79,10 +80,10 @@ const Header = ({
           >
             <Menu className="h-6 w-6" />
           </Button>
-          <a href="/" className="flex items-center">
+          <a href="/dashboard" className="flex items-center">
             <div className="bg-blue-600 text-white p-2 rounded-md mr-2">
               <img
-                src="../images/Ligtas.png"
+                src={ligtasLogo}
                 alt="L.I.G.T.A.S. Logo"
                 className="h-10 w-10"
               />
