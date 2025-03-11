@@ -138,7 +138,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           className="w-full justify-start"
           onClick={() => {
             logout();
-            window.location.href = "/login";
+            window.location.href = "/";
           }}
         >
           <LogOut className="mr-2 h-5 w-5" />

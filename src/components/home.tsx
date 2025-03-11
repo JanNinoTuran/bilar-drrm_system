@@ -3,15 +3,29 @@ import Footer from "./layout/Footer";
 import HeroSection from "./home/HeroSection";
 import FeatureGrid from "./home/FeatureGrid";
 import AlertsWidget from "./alerts/AlertsWidget";
-import MapPreview from "./map/MapPreview";
 import DRRMNewsSection from "./home/DRRMNewsSection";
 import EmergencyContactsWidget from "./resources/EmergencyContactsWidget";
+import OpenWeatherWidget from "./weather/OpenWeatherWidget";
 import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Search, LogIn, UserPlus, MapPin, Bell } from "lucide-react";
+import {
+  LogIn,
+  MapPin,
+  Bell,
+  X,
+  AlertTriangle,
+  MessageSquare,
+  Info,
+} from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 
 const Home: React.FC = () => {
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -38,27 +52,175 @@ const Home: React.FC = () => {
           </div>
 
           <div className="flex items-center space-x-4">
-            <div
-              className={`transition-all duration-300 overflow-hidden ${isSearchOpen ? "w-64" : "w-0"}`}
+            <Popover
+              open={isNotificationOpen}
+              onOpenChange={setIsNotificationOpen}
             >
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <Input
-                  type="text"
-                  placeholder="Search..."
-                  className="w-full pl-10 pr-4 py-2 text-sm"
-                />
-              </div>
-            </div>
+              <PopoverTrigger asChild>
+                <Button variant="ghost" size="icon" className="relative">
+                  <Bell className="h-5 w-5" />
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    3
+                  </span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-80 p-0" align="end">
+                <Tabs defaultValue="alerts" className="w-full">
+                  <div className="flex items-center justify-between border-b px-3 py-2">
+                    <TabsList className="grid w-full grid-cols-3">
+                      <TabsTrigger value="alerts" className="text-xs">
+                        Alerts
+                      </TabsTrigger>
+                      <TabsTrigger value="messages" className="text-xs">
+                        Messages
+                      </TabsTrigger>
+                      <TabsTrigger value="notifications" className="text-xs">
+                        Notifications
+                      </TabsTrigger>
+                    </TabsList>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => setIsNotificationOpen(false)}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
 
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsSearchOpen(!isSearchOpen)}
-              aria-label="Search"
-            >
-              <Search className="h-5 w-5" />
-            </Button>
+                  <TabsContent
+                    value="alerts"
+                    className="max-h-[400px] overflow-y-auto"
+                  >
+                    <div className="p-2">
+                      <h3 className="text-sm font-medium mb-2">
+                        Recent Alerts
+                      </h3>
+                      <div className="space-y-2">
+                        <div className="p-2 bg-red-50 rounded-md border border-red-100">
+                          <div className="flex gap-2">
+                            <AlertTriangle className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
+                            <div>
+                              <h4 className="text-sm font-medium">
+                                Typhoon Warning
+                              </h4>
+                              <p className="text-xs text-gray-600">
+                                Typhoon approaching with sustained winds of 150
+                                kph. Expected landfall in 6 hours.
+                              </p>
+                              <div className="flex justify-between items-center mt-1">
+                                <span className="text-xs text-gray-500">
+                                  2 hours ago
+                                </span>
+                                <Badge
+                                  variant="outline"
+                                  className="text-xs bg-red-100 text-red-800"
+                                >
+                                  Critical
+                                </Badge>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="p-2 bg-yellow-50 rounded-md border border-yellow-100">
+                          <div className="flex gap-2">
+                            <AlertTriangle className="h-5 w-5 text-yellow-500 flex-shrink-0 mt-0.5" />
+                            <div>
+                              <h4 className="text-sm font-medium">
+                                Flood Alert
+                              </h4>
+                              <p className="text-xs text-gray-600">
+                                Rising water levels detected in Marikina River
+                                Basin. Prepare for possible evacuation.
+                              </p>
+                              <div className="flex justify-between items-center mt-1">
+                                <span className="text-xs text-gray-500">
+                                  5 hours ago
+                                </span>
+                                <Badge
+                                  variant="outline"
+                                  className="text-xs bg-yellow-100 text-yellow-800"
+                                >
+                                  High
+                                </Badge>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <Button variant="link" size="sm" className="w-full mt-2">
+                        View All Alerts
+                      </Button>
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent
+                    value="messages"
+                    className="max-h-[400px] overflow-y-auto"
+                  >
+                    <div className="p-2">
+                      <h3 className="text-sm font-medium mb-2">
+                        Recent Messages
+                      </h3>
+                      <div className="space-y-2">
+                        <div className="p-2 bg-blue-50 rounded-md border border-blue-100">
+                          <div className="flex gap-2">
+                            <MessageSquare className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
+                            <div>
+                              <h4 className="text-sm font-medium">
+                                DRRM Office
+                              </h4>
+                              <p className="text-xs text-gray-600">
+                                Please update your emergency contact information
+                                in your profile.
+                              </p>
+                              <span className="text-xs text-gray-500">
+                                1 day ago
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <Button variant="link" size="sm" className="w-full mt-2">
+                        View All Messages
+                      </Button>
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent
+                    value="notifications"
+                    className="max-h-[400px] overflow-y-auto"
+                  >
+                    <div className="p-2">
+                      <h3 className="text-sm font-medium mb-2">
+                        Recent Notifications
+                      </h3>
+                      <div className="space-y-2">
+                        <div className="p-2 bg-gray-50 rounded-md border border-gray-100">
+                          <div className="flex gap-2">
+                            <Info className="h-5 w-5 text-gray-500 flex-shrink-0 mt-0.5" />
+                            <div>
+                              <h4 className="text-sm font-medium">
+                                System Update
+                              </h4>
+                              <p className="text-xs text-gray-600">
+                                The system will undergo maintenance on June 15,
+                                2023 from 2:00 AM to 4:00 AM.
+                              </p>
+                              <span className="text-xs text-gray-500">
+                                3 days ago
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <Button variant="link" size="sm" className="w-full mt-2">
+                        View All Notifications
+                      </Button>
+                    </div>
+                  </TabsContent>
+                </Tabs>
+              </PopoverContent>
+            </Popover>
 
             <Button
               variant="outline"
@@ -85,37 +247,16 @@ const Home: React.FC = () => {
         </section>
 
         {/* DRRM News Section - New interactive section that appears on scroll */}
-        <DRRMNewsSection />
+        <DRRMNewsSection isAdmin={true} />
 
-        {/* Alert Information Section */}
-        <section className="py-12">
+        {/* Weather Forecast Section */}
+        <section className="py-12 bg-gradient-to-r from-blue-50 to-indigo-50">
           <div className="container mx-auto px-4">
             <h2 className="text-2xl font-bold mb-8 text-center">
-              Stay Informed & Prepared
+              Bilar, Bohol Weather Forecast
             </h2>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-xl font-semibold mb-4 flex items-center">
-                  <MapPin className="h-5 w-5 text-blue-600 mr-2" />
-                  Interactive Disaster Map
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Access our interactive map to view evacuation routes, safe
-                  zones, and emergency facilities in your area.
-                </p>
-                <MapPreview />
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-xl font-semibold mb-4 flex items-center">
-                  <Bell className="h-5 w-5 text-red-600 mr-2" />
-                  Active Alerts
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Get timely alerts and updates about potential hazards and
-                  emergency situations in your area.
-                </p>
-                <AlertsWidget />
-              </div>
+            <div className="flex justify-center">
+              <OpenWeatherWidget lat={9.7177} lon={124.1146} city="Bilar" />
             </div>
           </div>
         </section>

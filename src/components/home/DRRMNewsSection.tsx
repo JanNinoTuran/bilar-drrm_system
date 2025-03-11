@@ -2,7 +2,15 @@ import React, { useEffect, useRef, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Calendar, Clock, Info } from "lucide-react";
+import {
+  ArrowRight,
+  Calendar,
+  Clock,
+  Info,
+  Settings,
+  Loader2,
+} from "lucide-react";
+import { supabase } from "@/lib/supabase-client";
 
 interface NewsItem {
   id: string;
@@ -11,10 +19,12 @@ interface NewsItem {
   category: string;
   description: string;
   imageUrl: string;
+  displayOnLanding?: boolean;
 }
 
 interface DRRMNewsSectionProps {
   news?: NewsItem[];
+  isAdmin?: boolean;
 }
 
 const defaultNews: NewsItem[] = [
@@ -27,6 +37,7 @@ const defaultNews: NewsItem[] = [
       "The National Disaster Risk Reduction and Management Council (NDRRMC) successfully conducted a nationwide earthquake drill to enhance preparedness and response capabilities across the country. Over 500,000 participants from various sectors joined the simulation exercise.",
     imageUrl:
       "https://images.unsplash.com/photo-1596720426673-e4e14290f0cc?w=800&q=80",
+    displayOnLanding: true,
   },
   {
     id: "2",
@@ -37,6 +48,7 @@ const defaultNews: NewsItem[] = [
       "State-of-the-art early warning systems have been installed in 15 flood-prone municipalities across the region. These systems can detect rising water levels and automatically send alerts to residents and local authorities, providing crucial time for evacuation.",
     imageUrl:
       "https://images.unsplash.com/photo-1574103188526-4fabd2623804?w=800&q=80",
+    displayOnLanding: true,
   },
   {
     id: "3",
@@ -47,6 +59,7 @@ const defaultNews: NewsItem[] = [
       "A new community-based disaster preparedness program has been launched to empower local communities in disaster risk reduction. The program includes training on first aid, evacuation procedures, and basic search and rescue techniques.",
     imageUrl:
       "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&q=80",
+    displayOnLanding: true,
   },
   {
     id: "4",
@@ -57,14 +70,58 @@ const defaultNews: NewsItem[] = [
       "Experts have developed new adaptation strategies for coastal communities facing increased risks due to climate change. These strategies include mangrove restoration, elevated housing designs, and sustainable livelihood alternatives.",
     imageUrl:
       "https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?w=800&q=80",
+    displayOnLanding: true,
   },
 ];
 
 const DRRMNewsSection: React.FC<DRRMNewsSectionProps> = ({
-  news = defaultNews,
+  news = null,
+  isAdmin = false,
 }) => {
   const [visibleItems, setVisibleItems] = useState<string[]>([]);
+  const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const itemRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+
+  useEffect(() => {
+    // Load news from Supabase
+    const fetchNews = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("news")
+          .select("*")
+          .eq("display_on_landing", true)
+          .order("date", { ascending: false });
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          // Map the data to our format
+          const formattedNews = data.map((item) => ({
+            id: item.id,
+            title: item.title,
+            date: item.date,
+            category: item.category,
+            description: item.description,
+            imageUrl: item.image_url,
+            displayOnLanding: item.display_on_landing,
+          }));
+
+          setNewsItems(formattedNews);
+        } else {
+          // If no data, use default news
+          setNewsItems(defaultNews);
+        }
+      } catch (error) {
+        console.error("Failed to fetch news from Supabase:", error);
+        setNewsItems(defaultNews);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchNews();
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -90,7 +147,7 @@ const DRRMNewsSection: React.FC<DRRMNewsSectionProps> = ({
         if (ref) observer.unobserve(ref);
       });
     };
-  }, []);
+  }, [newsItems]);
 
   const getCategoryColor = (category: string) => {
     switch (category.toLowerCase()) {
@@ -102,6 +159,14 @@ const DRRMNewsSection: React.FC<DRRMNewsSectionProps> = ({
         return "bg-green-100 text-green-800";
       case "climate":
         return "bg-teal-100 text-teal-800";
+      case "policy":
+        return "bg-red-100 text-red-800";
+      case "event":
+        return "bg-yellow-100 text-yellow-800";
+      case "education":
+        return "bg-indigo-100 text-indigo-800";
+      case "infrastructure":
+        return "bg-orange-100 text-orange-800";
       default:
         return "bg-gray-100 text-gray-800";
     }
@@ -116,13 +181,39 @@ const DRRMNewsSection: React.FC<DRRMNewsSectionProps> = ({
     });
   };
 
+  if (isLoading) {
+    return (
+      <section className="py-12 bg-gradient-to-r from-blue-50 to-indigo-50">
+        <div className="container mx-auto px-4 text-center">
+          <div className="flex justify-center items-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+            <span className="ml-2 text-gray-600">Loading news items...</span>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (newsItems.length === 0) {
+    return null; // Don't render the section if no news to display
+  }
+
   return (
     <section className="py-12 bg-gradient-to-r from-blue-50 to-indigo-50">
       <div className="container mx-auto px-4">
         <div className="text-center mb-10">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            DRRM News & Updates
-          </h2>
+          <div className="flex justify-center items-center gap-2">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              DRRM News & Updates
+            </h2>
+            {isAdmin && (
+              <Button variant="ghost" size="sm" asChild>
+                <a href="/admin/news-management">
+                  <Settings className="h-4 w-4" />
+                </a>
+              </Button>
+            )}
+          </div>
           <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
             Stay informed about the latest developments, initiatives, and events
             in disaster risk reduction and management.
@@ -130,7 +221,7 @@ const DRRMNewsSection: React.FC<DRRMNewsSectionProps> = ({
         </div>
 
         <div className="space-y-16">
-          {news.map((item, index) => (
+          {newsItems.map((item, index) => (
             <div
               key={item.id}
               ref={(el) => (itemRefs.current[item.id] = el)}
@@ -176,12 +267,18 @@ const DRRMNewsSection: React.FC<DRRMNewsSectionProps> = ({
           ))}
         </div>
 
-        <div className="mt-12 text-center">
+        <div className="mt-12 text-center flex justify-center gap-4">
           <Button className="bg-blue-600 hover:bg-blue-700" asChild>
             <a href="/news">
               View All News & Updates <ArrowRight className="ml-2 h-4 w-4" />
             </a>
           </Button>
+
+          {isAdmin && (
+            <Button variant="outline" asChild>
+              <a href="/admin/news-management">Manage News</a>
+            </Button>
+          )}
         </div>
       </div>
     </section>

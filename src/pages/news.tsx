@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calendar, Search, ArrowRight } from "lucide-react";
-import Sidebar from "@/components/dashboard/Sidebar";
+import { Calendar, Search, ArrowRight, Loader2 } from "lucide-react";
+import { supabase } from "@/lib/supabase-client";
 
 interface NewsItem {
   id: string;
@@ -124,9 +123,53 @@ const allNews: NewsItem[] = [
 ];
 
 const NewsPage: React.FC = () => {
-  const [showSidebar, setShowSidebar] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [categories, setCategories] = useState<string[]>(["all"]);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("news")
+          .select("*")
+          .order("date", { ascending: false });
+
+        if (error) throw error;
+
+        // Map the data to our format
+        const formattedNews = data.map((item) => ({
+          id: item.id,
+          title: item.title,
+          date: item.date,
+          category: item.category,
+          description: item.description,
+          imageUrl: item.image_url,
+        }));
+
+        setNewsItems(formattedNews);
+
+        // Extract unique categories
+        const uniqueCategories = [
+          "all",
+          ...Array.from(
+            new Set(formattedNews.map((item) => item.category.toLowerCase())),
+          ),
+        ];
+        setCategories(uniqueCategories);
+      } catch (error) {
+        console.error("Error fetching news:", error);
+        // Fallback to default news if there's an error
+        setNewsItems(allNews);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchNews();
+  }, []);
 
   const getCategoryColor = (category: string) => {
     switch (category.toLowerCase()) {
@@ -160,12 +203,7 @@ const NewsPage: React.FC = () => {
     });
   };
 
-  const categories = [
-    "all",
-    ...Array.from(new Set(allNews.map((item) => item.category.toLowerCase()))),
-  ];
-
-  const filteredNews = allNews.filter((item) => {
+  const filteredNews = newsItems.filter((item) => {
     const matchesSearch =
       item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.description.toLowerCase().includes(searchTerm.toLowerCase());
@@ -232,7 +270,12 @@ const NewsPage: React.FC = () => {
             </Tabs>
           </div>
 
-          {filteredNews.length > 0 ? (
+          {isLoading ? (
+            <div className="flex justify-center items-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+              <span className="ml-2 text-gray-600">Loading news items...</span>
+            </div>
+          ) : filteredNews.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredNews.map((item) => (
                 <Card
