@@ -6,6 +6,7 @@ import AlertsWidget from "./alerts/AlertsWidget";
 import DRRMNewsSection from "./home/DRRMNewsSection";
 import EmergencyContactsWidget from "./resources/EmergencyContactsWidget";
 import OpenWeatherWidget from "./weather/OpenWeatherWidget";
+import MiniWeatherWidget from "./weather/MiniWeatherWidget";
 import { Button } from "./ui/button";
 import {
   LogIn,
@@ -52,6 +53,7 @@ const Home: React.FC = () => {
           </div>
 
           <div className="flex items-center space-x-4">
+            <MiniWeatherWidget lat={9.7177} lon={124.1146} city="Bilar" />
             <Popover
               open={isNotificationOpen}
               onOpenChange={setIsNotificationOpen}
