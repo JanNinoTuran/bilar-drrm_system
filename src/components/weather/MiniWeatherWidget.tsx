@@ -37,6 +37,7 @@ interface MiniWeatherWidgetProps {
   lat?: number;
   lon?: number;
   apiKey?: string;
+  showDate?: boolean;
 }
 
 const MiniWeatherWidget: React.FC<MiniWeatherWidgetProps> = ({
@@ -44,6 +45,7 @@ const MiniWeatherWidget: React.FC<MiniWeatherWidgetProps> = ({
   lat = 9.7177,
   lon = 124.1146,
   apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY,
+  showDate = false,
 }) => {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -143,25 +145,37 @@ const MiniWeatherWidget: React.FC<MiniWeatherWidgetProps> = ({
   }
 
   return (
-    <div className="flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-1.5 rounded-full shadow-sm border border-blue-100 hover:shadow-md transition-all duration-300">
-      <div className="flex items-center gap-1">
-        {getWeatherIcon(weatherData.weather[0].id)}
-        <span className="font-medium text-sm">
-          {Math.round(weatherData.main.temp)}°C
-        </span>
+    <div className="flex flex-col items-end gap-1">
+      {showDate && (
+        <p className="text-sm text-gray-500 mb-1">
+          {new Date().toLocaleDateString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </p>
+      )}
+      <div className="flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-1.5 rounded-full shadow-sm border border-blue-100 hover:shadow-md transition-all duration-300">
+        <div className="flex items-center gap-1">
+          {getWeatherIcon(weatherData.weather[0].id)}
+          <span className="font-medium text-sm">
+            {Math.round(weatherData.main.temp)}°C
+          </span>
+        </div>
+        <Badge variant="outline" className="bg-white/80 text-xs font-normal">
+          {weatherData.name}
+        </Badge>
+        <div className="hidden sm:flex items-center gap-1 text-xs text-gray-500">
+          <Droplets className="h-3 w-3 text-blue-400" />
+          <span>{weatherData.main.humidity}%</span>
+        </div>
+        <div className="hidden sm:flex items-center gap-1 text-xs text-gray-500">
+          <Wind className="h-3 w-3 text-blue-400" />
+          <span>{Math.round(weatherData.wind.speed * 3.6)} km/h</span>
+        </div>
+        <Clock />
       </div>
-      <Badge variant="outline" className="bg-white/80 text-xs font-normal">
-        {weatherData.name}
-      </Badge>
-      <div className="hidden sm:flex items-center gap-1 text-xs text-gray-500">
-        <Droplets className="h-3 w-3 text-blue-400" />
-        <span>{weatherData.main.humidity}%</span>
-      </div>
-      <div className="hidden sm:flex items-center gap-1 text-xs text-gray-500">
-        <Wind className="h-3 w-3 text-blue-400" />
-        <span>{Math.round(weatherData.wind.speed * 3.6)} km/h</span>
-      </div>
-      <Clock />
     </div>
   );
 };

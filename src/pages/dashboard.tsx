@@ -6,6 +6,7 @@ import AlertsWidget from "@/components/alerts/AlertsWidget";
 import MapPreview from "@/components/map/MapPreview";
 import PopulationStatistics from "@/components/dashboard/PopulationStatistics";
 import Sidebar from "@/components/dashboard/Sidebar";
+import MiniWeatherWidget from "@/components/weather/MiniWeatherWidget";
 import { useAuth } from "@/context/AuthContext";
 import { Navigate } from "react-router-dom";
 import { MapPin } from "lucide-react";
@@ -83,36 +84,15 @@ const Dashboard: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col items-end">
+              <div className="flex items-end">
                 <div className="text-right">
-                  <p className="text-sm text-gray-500">
-                    {new Date().toLocaleDateString("en-US", {
-                      weekday: "long",
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </p>
-                  <div className="flex items-center gap-2 mt-2">
-                    <div className="bg-blue-50 p-2 rounded-md flex items-center">
-                      <svg
-                        className="h-5 w-5 text-blue-500 mr-1"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"
-                        />
-                      </svg>
-                      <span className="font-medium">28°C</span>
-                      <span className="text-xs text-gray-500 ml-1">
-                        Partly Cloudy
-                      </span>
-                    </div>
+                  <div>
+                    <MiniWeatherWidget
+                      city={user?.location?.split(",")?.[0] || "Bilar"}
+                      lat={9.7177}
+                      lon={124.1146}
+                      showDate={true}
+                    />
                   </div>
                 </div>
               </div>
