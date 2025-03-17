@@ -36,7 +36,7 @@ const defaultNews: NewsItem[] = [
     description:
       "The National Disaster Risk Reduction and Management Council (NDRRMC) successfully conducted a nationwide earthquake drill to enhance preparedness and response capabilities across the country. Over 500,000 participants from various sectors joined the simulation exercise.",
     imageUrl:
-      "https://images.unsplash.com/photo-1596720426673-e4e14290f0cc?w=800&q=80",
+      "https://1.bp.blogspot.com/-4mudhOGLSDs/X8SWp9Cd4eI/AAAAAAAAAFE/xIRcPVWS-aYwovK0ylEPjW1qE918GfmdwCLcBGAsYHQ/s1333/earthquake+drill.png",
     displayOnLanding: true,
   },
   {
@@ -47,7 +47,7 @@ const defaultNews: NewsItem[] = [
     description:
       "State-of-the-art early warning systems have been installed in 15 flood-prone municipalities across the region. These systems can detect rising water levels and automatically send alerts to residents and local authorities, providing crucial time for evacuation.",
     imageUrl:
-      "https://images.unsplash.com/photo-1574103188526-4fabd2623804?w=800&q=80",
+      "https://www.icimod.org/wp-content/uploads/2019/12/cbfews-cover-image.jpg",
     displayOnLanding: true,
   },
   {
@@ -58,7 +58,7 @@ const defaultNews: NewsItem[] = [
     description:
       "A new community-based disaster preparedness program has been launched to empower local communities in disaster risk reduction. The program includes training on first aid, evacuation procedures, and basic search and rescue techniques.",
     imageUrl:
-      "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&q=80",
+      "https://1.bp.blogspot.com/-X718nsasguY/U3isJkMfIeI/AAAAAAAAT7E/evzrarTnaT4/s1600/Picture+8.JPG",
     displayOnLanding: true,
   },
   {
@@ -68,8 +68,19 @@ const defaultNews: NewsItem[] = [
     category: "Climate",
     description:
       "Experts have developed new adaptation strategies for coastal communities facing increased risks due to climate change. These strategies include mangrove restoration, elevated housing designs, and sustainable livelihood alternatives.",
+    imageUrl: "https://scx2.b-cdn.net/gfx/news/2021/malaysias-worst-floods.jpg",
+    displayOnLanding: true,
+  },
+  {
+    id: "5",
+    title:
+      "New Training Program Launched for Disaster Risk Reduction Volunteers",
+    date: "2023-09-15",
+    category: "Training",
+    description:
+      " Our new training program is designed to help employees enhance their skills and advance in their careers. It will be available starting next month.",
     imageUrl:
-      "https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?w=800&q=80",
+      "https://next.huskroua-cbc.eu/wp-content/uploads/2025/03/481081300_122157153398352880_4459658121168594615_n-640x427.jpg",
     displayOnLanding: true,
   },
 ];
@@ -87,11 +98,11 @@ const DRRMNewsSection: React.FC<DRRMNewsSectionProps> = ({
     // Load news from Supabase
     const fetchNews = async () => {
       try {
-        const { data, error } = await supabase
+        const { data, error } = (await supabase
           .from("news")
           .select("*")
-          .eq("display_on_landing", true)
-          .order("date", { ascending: false });
+          .order("date", { ascending: false })
+          .eq("display_on_landing", true)) as { data: any[]; error: any };
 
         if (error) throw error;
 
