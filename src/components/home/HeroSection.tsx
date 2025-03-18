@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, AlertTriangle, Shield, MapPin } from "lucide-react";
+import { ArrowRight, AlertTriangle, Loader2 } from "lucide-react"; // Added Loader2 for loading icon
 
 // Import local images
 import SampleImage from "@/components/images/Sample.jpg";
@@ -11,22 +12,25 @@ interface HeroSectionProps {
   title?: string;
   description?: string;
   backgroundImages?: string[];
-  primaryButtonText?: string;
-  secondaryButtonText?: string;
-  onPrimaryButtonClick?: () => void;
-  onSecondaryButtonClick?: () => void;
 }
 
 const HeroSection: React.FC<HeroSectionProps> = ({
   title = "Disaster Risk Reduction and Management - BILAR",
   description = "Get real-time disaster information, educational resources, and interactive tools to help your community prepare for, respond to, and recover from disasters.",
-  backgroundImages = [SampleImage, SampleImage2, SampleImage3], // Added second image
-  primaryButtonText = "View Disaster Map",
-  secondaryButtonText = "Emergency Guides",
-  onPrimaryButtonClick = () => {},
-  onSecondaryButtonClick = () => {},
+  backgroundImages = [SampleImage, SampleImage2, SampleImage3],
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(false); // Added loading state
+  const navigate = useNavigate();
+
+  // Function to handle navigation with loading delay
+  const handleGetStartedClick = () => {
+    setIsLoading(true); // Start loading
+    setTimeout(() => {
+      setIsLoading(false); // Stop loading after 2 seconds
+      navigate("/login"); // Navigate to login page
+    }, 2000); // 2000ms = 2 seconds
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -62,26 +66,25 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           {description}
         </p>
 
-        {/* Call to Action Buttons */}
+        {/* Call to Action Button */}
         <div className="flex flex-col sm:flex-row gap-4 mt-2">
           <Button
             size="lg"
-            className="bg-red-600 hover:bg-red-700 text-white font-medium px-6 py-3 h-12"
-            onClick={onPrimaryButtonClick}
+            className="bg-gradient-to-r from-yellow-400 to-amber-500 text-gray-900 font-medium px-6 py-3 h-12 hover:from-yellow-500 hover:to-amber-600 transition-all duration-300 shadow-lg hover:shadow-amber-500/50 border border-amber-300 disabled:opacity-70" // Added disabled styling
+            onClick={handleGetStartedClick}
+            disabled={isLoading} // Disable button while loading
           >
-            <MapPin className="mr-2 h-5 w-5" />
-            {primaryButtonText}
-            <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
-
-          <Button
-            variant="outline"
-            size="lg"
-            className="border-amber-400 bg-amber-500/80 text-white hover:bg-amber-600/90 h-12"
-            onClick={onSecondaryButtonClick}
-          >
-            <Shield className="mr-2 h-5 w-5" />
-            {secondaryButtonText}
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                Loading...
+              </>
+            ) : (
+              <>
+                Get Started
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </>
+            )}
           </Button>
         </div>
 

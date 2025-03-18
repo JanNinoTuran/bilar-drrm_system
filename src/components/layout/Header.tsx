@@ -118,7 +118,7 @@ const Header = ({
                   )}
                 >
                   <MapPin className="mr-2 h-4 w-4" />
-                  Interactive Map
+                  Disaster Map
                 </NavigationMenuLink>
               </NavigationMenuItem>
               <NavigationMenuItem>
@@ -283,7 +283,7 @@ const Header = ({
                 className="flex items-center p-2 text-gray-700 rounded-md hover:bg-gray-100"
               >
                 <MapPin className="mr-3 h-5 w-5 text-blue-500" />
-                Interactive Map
+                Disaster Map
               </a>
             </li>
             <li>
