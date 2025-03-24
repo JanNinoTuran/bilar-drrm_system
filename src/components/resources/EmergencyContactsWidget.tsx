@@ -85,39 +85,599 @@ const defaultContacts: EmergencyContact[] = [
 
 const boholMunicipalities: Municipality[] = [
   {
-    id: "bilar",
-    name: "Bilar",
+    id: "alburquerque",
+    name: "Alburquerque",
     contacts: [
       {
-        id: "bilar-1",
-        name: "Bilar MDRRMO",
-        number: "(038) 535-9111",
+        id: "alburquerque-1",
+        name: "Alburquerque MDRRMO",
+        number: "(038) 539-1000",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "alicia",
+    name: "Alicia",
+    contacts: [
+      {
+        id: "alicia-1",
+        name: "Alicia MDRRMO",
+        number: "(038) 539-1100",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "anda",
+    name: "Anda",
+    contacts: [
+      {
+        id: "anda-1",
+        name: "Anda MDRRMO",
+        number: "(038) 521-9000",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "antequera",
+    name: "Antequera",
+    contacts: [
+      {
+        id: "antequera-1",
+        name: "Antequera MDRRMO",
+        number: "(038) 539-1200",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "baclayon",
+    name: "Baclayon",
+    contacts: [
+      {
+        id: "baclayon-1",
+        name: "Baclayon MDRRMO",
+        number: "(038) 539-1300",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "balilihan",
+    name: "Balilihan",
+    contacts: [
+      {
+        id: "balilihan-1",
+        name: "Balilihan MDRRMO",
+        number: "(038) 539-1400",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "batuan",
+    name: "Batuan",
+    contacts: [
+      {
+        id: "batuan-1",
+        name: "Batuan MDRRMO",
+        number: "(038) 539-1500",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "bien-unido",
+    name: "Bien Unido",
+    contacts: [
+      {
+        id: "bien-unido-1",
+        name: "Bien Unido MDRRMO",
+        number: "(038) 539-4700",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "buenavista",
+    name: "Buenavista",
+    contacts: [
+      {
+        id: "buenavista-1",
+        name: "Buenavista MDRRMO",
+        number: "(038) 539-1600",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "calape",
+    name: "Calape",
+    contacts: [
+      {
+        id: "calape-1",
+        name: "Calape MDRRMO",
+        number: "(038) 539-1700",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "candijay",
+    name: "Candijay",
+    contacts: [
+      {
+        id: "candijay-1",
+        name: "Candijay MDRRMO",
+        number: "(038) 539-1800",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "carmen",
+    name: "Carmen",
+    contacts: [
+      {
+        id: "carmen-1",
+        name: "Carmen MDRRMO",
+        number: "(038) 533-9088",
         category: "emergency",
         description: "Municipal Disaster Risk Reduction and Management Office",
         available24Hours: true,
       },
       {
-        id: "bilar-2",
-        name: "Bilar Municipal Fire Station",
-        number: "(038) 535-9222",
-        category: "emergency",
-        description: "For fire emergencies and rescue operations",
-        available24Hours: true,
-      },
-      {
-        id: "bilar-3",
-        name: "Bilar Rural Health Unit",
-        number: "(038) 535-9333",
+        id: "carmen-2",
+        name: "Carmen Municipal Health Office",
+        number: "(038) 533-9100",
         category: "medical",
         description: "For medical emergencies and health concerns",
         available24Hours: false,
       },
+    ],
+  },
+  {
+    id: "catigbian",
+    name: "Catigbian",
+    contacts: [
       {
-        id: "bilar-4",
-        name: "Bilar Police Station",
-        number: "(038) 535-9444",
+        id: "catigbian-1",
+        name: "Catigbian MDRRMO",
+        number: "(038) 539-1900",
         category: "emergency",
-        description: "For police emergencies and security concerns",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "clarin",
+    name: "Clarin",
+    contacts: [
+      {
+        id: "clarin-1",
+        name: "Clarin MDRRMO",
+        number: "(038) 539-2000",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "corella",
+    name: "Corella",
+    contacts: [
+      {
+        id: "corella-1",
+        name: "Corella MDRRMO",
+        number: "(038) 539-2100",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "cortes",
+    name: "Cortes",
+    contacts: [
+      {
+        id: "cortes-1",
+        name: "Cortes MDRRMO",
+        number: "(038) 539-2200",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "dagohoy",
+    name: "Dagohoy",
+    contacts: [
+      {
+        id: "dagohoy-1",
+        name: "Dagohoy MDRRMO",
+        number: "(038) 539-2300",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "danao",
+    name: "Danao",
+    contacts: [
+      {
+        id: "danao-1",
+        name: "Danao MDRRMO",
+        number: "(038) 539-2400",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "dauis",
+    name: "Dauis",
+    contacts: [
+      {
+        id: "dauis-1",
+        name: "Dauis MDRRMO",
+        number: "(038) 539-2500",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "dimiao",
+    name: "Dimiao",
+    contacts: [
+      {
+        id: "dimiao-1",
+        name: "Dimiao MDRRMO",
+        number: "(038) 539-2600",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "duero",
+    name: "Duero",
+    contacts: [
+      {
+        id: "duero-1",
+        name: "Duero MDRRMO",
+        number: "(038) 539-2700",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "garcia-hernandez",
+    name: "Garcia Hernandez",
+    contacts: [
+      {
+        id: "garcia-hernandez-1",
+        name: "Garcia Hernandez MDRRMO",
+        number: "(038) 539-2800",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "getafe",
+    name: "Getafe",
+    contacts: [
+      {
+        id: "getafe-1",
+        name: "Getafe MDRRMO",
+        number: "(038) 539-2900",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "guindulman",
+    name: "Guindulman",
+    contacts: [
+      {
+        id: "guindulman-1",
+        name: "Guindulman MDRRMO",
+        number: "(038) 539-3000",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "inabanga",
+    name: "Inabanga",
+    contacts: [
+      {
+        id: "inabanga-1",
+        name: "Inabanga MDRRMO",
+        number: "(038) 539-3100",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "jagna",
+    name: "Jagna",
+    contacts: [
+      {
+        id: "jagna-1",
+        name: "Jagna MDRRMO",
+        number: "(038) 531-8005",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+      {
+        id: "jagna-2",
+        name: "Jagna District Hospital",
+        number: "(038) 531-8067",
+        category: "medical",
+        description: "District hospital for medical emergencies",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "lila",
+    name: "Lila",
+    contacts: [
+      {
+        id: "lila-1",
+        name: "Lila MDRRMO",
+        number: "(038) 539-3200",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "loay",
+    name: "Loay",
+    contacts: [
+      {
+        id: "loay-1",
+        name: "Loay MDRRMO",
+        number: "(038) 539-3300",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "loboc",
+    name: "Loboc",
+    contacts: [
+      {
+        id: "loboc-1",
+        name: "Loboc MDRRMO",
+        number: "(038) 539-3400",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "loon",
+    name: "Loon",
+    contacts: [
+      {
+        id: "loon-1",
+        name: "Loon MDRRMO",
+        number: "(038) 539-9088",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "mabini",
+    name: "Mabini",
+    contacts: [
+      {
+        id: "mabini-1",
+        name: "Mabini MDRRMO",
+        number: "(038) 539-3500",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "maribojoc",
+    name: "Maribojoc",
+    contacts: [
+      {
+        id: "maribojoc-1",
+        name: "Maribojoc MDRRMO",
+        number: "(038) 539-3600",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "panglao",
+    name: "Panglao",
+    contacts: [
+      {
+        id: "panglao-1",
+        name: "Panglao MDRRMO",
+        number: "(038) 502-9144",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+      {
+        id: "panglao-2",
+        name: "Panglao Tourist Police",
+        number: "(038) 502-8177",
+        category: "emergency",
+        description: "For tourist-related emergencies and security concerns",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "pilar",
+    name: "Pilar",
+    contacts: [
+      {
+        id: "pilar-1",
+        name: "Pilar MDRRMO",
+        number: "(038) 539-3700",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "pres-carlos-p-garcia",
+    name: "Pres. Carlos P. Garcia",
+    contacts: [
+      {
+        id: "pres-carlos-p-garcia-1",
+        name: "Pres. Carlos P. Garcia MDRRMO",
+        number: "(038) 539-3800",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "sagbayan",
+    name: "Sagbayan",
+    contacts: [
+      {
+        id: "sagbayan-1",
+        name: "Sagbayan MDRRMO",
+        number: "(038) 539-3900",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "san-isidro",
+    name: "San Isidro",
+    contacts: [
+      {
+        id: "san-isidro-1",
+        name: "San Isidro MDRRMO",
+        number: "(038) 539-4000",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "san-miguel",
+    name: "San Miguel",
+    contacts: [
+      {
+        id: "san-miguel-1",
+        name: "San Miguel MDRRMO",
+        number: "(038) 539-4100",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "sevilla",
+    name: "Sevilla",
+    contacts: [
+      {
+        id: "sevilla-1",
+        name: "Sevilla MDRRMO",
+        number: "(038) 539-4200",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "sierra-bullones",
+    name: "Sierra Bullones",
+    contacts: [
+      {
+        id: "sierra-bullones-1",
+        name: "Sierra Bullones MDRRMO",
+        number: "(038) 539-4300",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "sikatuna",
+    name: "Sikatuna",
+    contacts: [
+      {
+        id: "sikatuna-1",
+        name: "Sikatuna MDRRMO",
+        number: "(038) 539-4400",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
         available24Hours: true,
       },
     ],
@@ -153,108 +713,6 @@ const boholMunicipalities: Municipality[] = [
     ],
   },
   {
-    id: "tubigon",
-    name: "Tubigon",
-    contacts: [
-      {
-        id: "tubigon-1",
-        name: "Tubigon MDRRMO",
-        number: "(038) 508-8977",
-        category: "emergency",
-        description: "Municipal Disaster Risk Reduction and Management Office",
-        available24Hours: true,
-      },
-      {
-        id: "tubigon-2",
-        name: "Tubigon Municipal Fire Station",
-        number: "(038) 508-8900",
-        category: "emergency",
-        description: "For fire emergencies and rescue operations",
-        available24Hours: true,
-      },
-    ],
-  },
-  {
-    id: "carmen",
-    name: "Carmen",
-    contacts: [
-      {
-        id: "carmen-1",
-        name: "Carmen MDRRMO",
-        number: "(038) 533-9088",
-        category: "emergency",
-        description: "Municipal Disaster Risk Reduction and Management Office",
-        available24Hours: true,
-      },
-      {
-        id: "carmen-2",
-        name: "Carmen Municipal Health Office",
-        number: "(038) 533-9100",
-        category: "medical",
-        description: "For medical emergencies and health concerns",
-        available24Hours: false,
-      },
-    ],
-  },
-  {
-    id: "jagna",
-    name: "Jagna",
-    contacts: [
-      {
-        id: "jagna-1",
-        name: "Jagna MDRRMO",
-        number: "(038) 531-8005",
-        category: "emergency",
-        description: "Municipal Disaster Risk Reduction and Management Office",
-        available24Hours: true,
-      },
-      {
-        id: "jagna-2",
-        name: "Jagna District Hospital",
-        number: "(038) 531-8067",
-        category: "medical",
-        description: "District hospital for medical emergencies",
-        available24Hours: true,
-      },
-    ],
-  },
-  {
-    id: "loon",
-    name: "Loon",
-    contacts: [
-      {
-        id: "loon-1",
-        name: "Loon MDRRMO",
-        number: "(038) 539-9088",
-        category: "emergency",
-        description: "Municipal Disaster Risk Reduction and Management Office",
-        available24Hours: true,
-      },
-    ],
-  },
-  {
-    id: "panglao",
-    name: "Panglao",
-    contacts: [
-      {
-        id: "panglao-1",
-        name: "Panglao MDRRMO",
-        number: "(038) 502-9144",
-        category: "emergency",
-        description: "Municipal Disaster Risk Reduction and Management Office",
-        available24Hours: true,
-      },
-      {
-        id: "panglao-2",
-        name: "Panglao Tourist Police",
-        number: "(038) 502-8177",
-        category: "emergency",
-        description: "For tourist-related emergencies and security concerns",
-        available24Hours: true,
-      },
-    ],
-  },
-  {
     id: "talibon",
     name: "Talibon",
     contacts: [
@@ -272,6 +730,42 @@ const boholMunicipalities: Municipality[] = [
         number: "(038) 515-0033",
         category: "medical",
         description: "District hospital for medical emergencies",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "trinidad",
+    name: "Trinidad",
+    contacts: [
+      {
+        id: "trinidad-1",
+        name: "Trinidad MDRRMO",
+        number: "(038) 539-4500",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+    ],
+  },
+  {
+    id: "tubigon",
+    name: "Tubigon",
+    contacts: [
+      {
+        id: "tubigon-1",
+        name: "Tubigon MDRRMO",
+        number: "(038) 508-8977",
+        category: "emergency",
+        description: "Municipal Disaster Risk Reduction and Management Office",
+        available24Hours: true,
+      },
+      {
+        id: "tubigon-2",
+        name: "Tubigon Municipal Fire Station",
+        number: "(038) 508-8900",
+        category: "emergency",
+        description: "For fire emergencies and rescue operations",
         available24Hours: true,
       },
     ],
@@ -299,13 +793,13 @@ const boholMunicipalities: Municipality[] = [
     ],
   },
   {
-    id: "anda",
-    name: "Anda",
+    id: "valencia",
+    name: "Valencia",
     contacts: [
       {
-        id: "anda-1",
-        name: "Anda MDRRMO",
-        number: "(038) 521-9000",
+        id: "valencia-1",
+        name: "Valencia MDRRMO",
+        number: "(038) 539-4600",
         category: "emergency",
         description: "Municipal Disaster Risk Reduction and Management Office",
         available24Hours: true,
