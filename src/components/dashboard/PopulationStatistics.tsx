@@ -2,6 +2,27 @@ import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import {
   Users,
   Home,
@@ -9,6 +30,10 @@ import {
   TrendingUp,
   MapPin,
   ChevronDown,
+  Pencil,
+  Trash,
+  Save,
+  X,
 } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
@@ -332,6 +357,32 @@ const PopulationStatistics: React.FC<PopulationStatisticsProps> = ({
 }) => {
   const [selectedBarangay, setSelectedBarangay] = useState<string>("all");
   const [activeTab, setActiveTab] = useState<string>("overview");
+  const [isAddingResident, setIsAddingResident] = useState(false);
+  const [isEditingResident, setIsEditingResident] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [editingResidentIndex, setEditingResidentIndex] = useState<
+    number | null
+  >(null);
+  const [deletingResidentIndex, setDeletingResidentIndex] = useState<
+    number | null
+  >(null);
+  const [barangaysData, setBarangaysData] = useState<BarangayData[]>(barangays);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchField, setSearchField] = useState<string>("all");
+
+  // Form state for new/editing resident
+  const [residentForm, setResidentForm] = useState<ResidentData>({
+    lastName: "",
+    firstName: "",
+    middleName: "",
+    extension: "",
+    relationToHousehold: "",
+    birthday: "",
+    sex: "Male",
+    civilStatus: "",
+    age: 0,
+    street: "",
+  });
 
   const formatNumber = (num: number) => {
     return num.toLocaleString();
@@ -352,10 +403,152 @@ const PopulationStatistics: React.FC<PopulationStatisticsProps> = ({
     if (selectedBarangay === "all") {
       return null;
     }
-    return barangays.find((b) => b.name === selectedBarangay);
+    return barangaysData.find((b) => b.name === selectedBarangay);
   };
 
   const selectedData = getSelectedBarangayData();
+
+  // Filter residents based on search query
+  const filteredResidents = React.useMemo(() => {
+    if (!selectedData || !selectedData.residents) return [];
+    if (!searchQuery.trim()) return selectedData.residents;
+
+    return selectedData.residents.filter((resident) => {
+      const query = searchQuery.toLowerCase();
+
+      if (searchField === "all") {
+        return (
+          resident.firstName.toLowerCase().includes(query) ||
+          resident.lastName.toLowerCase().includes(query) ||
+          resident.middleName.toLowerCase().includes(query) ||
+          resident.street.toLowerCase().includes(query) ||
+          resident.civilStatus.toLowerCase().includes(query) ||
+          resident.sex.toLowerCase().includes(query) ||
+          resident.age.toString().includes(query)
+        );
+      }
+
+      // Search by specific field
+      if (searchField === "age") {
+        return resident.age.toString().includes(query);
+      }
+
+      // @ts-ignore - We know these fields exist
+      return resident[searchField].toLowerCase().includes(query);
+    });
+  }, [selectedData, searchQuery, searchField]);
+
+  // Reset search
+  const resetSearch = () => {
+    setSearchQuery("");
+    setSearchField("all");
+  };
+
+  // Handle form input changes
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setResidentForm((prev) => ({
+      ...prev,
+      [name]: name === "age" ? parseInt(value) || 0 : value,
+    }));
+  };
+
+  // Handle form select changes
+  const handleSelectChange = (name: string, value: string) => {
+    setResidentForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Reset form
+  const resetForm = () => {
+    resetSearch();
+    setResidentForm({
+      lastName: "",
+      firstName: "",
+      middleName: "",
+      extension: "",
+      relationToHousehold: "",
+      birthday: "",
+      sex: "Male",
+      civilStatus: "",
+      age: 0,
+      street: "",
+    });
+  };
+
+  // Add new resident
+  const handleAddResident = () => {
+    if (!selectedData) return;
+
+    const updatedBarangays = [...barangaysData];
+    const barangayIndex = updatedBarangays.findIndex(
+      (b) => b.name === selectedBarangay,
+    );
+
+    if (barangayIndex !== -1) {
+      updatedBarangays[barangayIndex].residents.push({ ...residentForm });
+      setBarangaysData(updatedBarangays);
+      setIsAddingResident(false);
+      resetForm();
+    }
+  };
+
+  // Edit resident
+  const handleEditResident = (index: number) => {
+    if (!selectedData) return;
+
+    setEditingResidentIndex(index);
+    setResidentForm({ ...selectedData.residents[index] });
+    setIsEditingResident(true);
+  };
+
+  // Save edited resident
+  const handleSaveEditedResident = () => {
+    if (!selectedData || editingResidentIndex === null) return;
+
+    const updatedBarangays = [...barangaysData];
+    const barangayIndex = updatedBarangays.findIndex(
+      (b) => b.name === selectedBarangay,
+    );
+
+    if (barangayIndex !== -1) {
+      updatedBarangays[barangayIndex].residents[editingResidentIndex] = {
+        ...residentForm,
+      };
+      setBarangaysData(updatedBarangays);
+      setIsEditingResident(false);
+      setEditingResidentIndex(null);
+      resetForm();
+    }
+  };
+
+  // Delete resident
+  const handleDeleteResident = (index: number) => {
+    setDeletingResidentIndex(index);
+    setIsDeleteDialogOpen(true);
+  };
+
+  // Confirm delete resident
+  const confirmDeleteResident = () => {
+    if (!selectedData || deletingResidentIndex === null) return;
+
+    const updatedBarangays = [...barangaysData];
+    const barangayIndex = updatedBarangays.findIndex(
+      (b) => b.name === selectedBarangay,
+    );
+
+    if (barangayIndex !== -1) {
+      updatedBarangays[barangayIndex].residents.splice(
+        deletingResidentIndex,
+        1,
+      );
+      setBarangaysData(updatedBarangays);
+      setIsDeleteDialogOpen(false);
+      setDeletingResidentIndex(null);
+    }
+  };
 
   return (
     <Card className="w-full bg-white shadow-md">
@@ -371,7 +564,7 @@ const PopulationStatistics: React.FC<PopulationStatisticsProps> = ({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Barangays</SelectItem>
-              {barangays.map((barangay) => (
+              {barangaysData.map((barangay) => (
                 <SelectItem key={barangay.name} value={barangay.name}>
                   {barangay.name}
                 </SelectItem>
@@ -728,9 +921,45 @@ const PopulationStatistics: React.FC<PopulationStatisticsProps> = ({
                   <h3 className="text-lg font-medium">
                     {selectedData?.name} Residents
                   </h3>
-                  <Badge variant="outline">
-                    {selectedData?.residents.length || 0} Records
-                  </Badge>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline">
+                      {selectedData?.residents.length || 0} Records
+                    </Badge>
+                    <Button
+                      size="sm"
+                      onClick={() => setIsAddingResident(true)}
+                      className="bg-green-600 hover:bg-green-700"
+                    >
+                      <Users className="mr-2 h-4 w-4" />
+                      Add Resident
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Search functionality */}
+                <div className="mb-4 flex gap-4">
+                  <div className="flex-1">
+                    <Input
+                      placeholder="Search residents by name, street, etc."
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      value={searchQuery}
+                      className="w-full"
+                    />
+                  </div>
+                  <Select value={searchField} onValueChange={setSearchField}>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Search by field" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Fields</SelectItem>
+                      <SelectItem value="lastName">Last Name</SelectItem>
+                      <SelectItem value="firstName">First Name</SelectItem>
+                      <SelectItem value="street">Street</SelectItem>
+                      <SelectItem value="age">Age</SelectItem>
+                      <SelectItem value="sex">Sex</SelectItem>
+                      <SelectItem value="civilStatus">Civil Status</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 {selectedData?.residents &&
@@ -749,10 +978,11 @@ const PopulationStatistics: React.FC<PopulationStatisticsProps> = ({
                           <TableHead>Sex</TableHead>
                           <TableHead>Civil Status</TableHead>
                           <TableHead>Age</TableHead>
+                          <TableHead>Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {selectedData.residents.map((resident, index) => (
+                        {filteredResidents.map((resident, index) => (
                           <TableRow key={index}>
                             <TableCell>{resident.street}</TableCell>
                             <TableCell className="font-medium">
@@ -768,6 +998,26 @@ const PopulationStatistics: React.FC<PopulationStatisticsProps> = ({
                             <TableCell>{resident.sex}</TableCell>
                             <TableCell>{resident.civilStatus}</TableCell>
                             <TableCell>{resident.age}</TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-2">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => handleEditResident(index)}
+                                  className="h-8 w-8 text-blue-600"
+                                >
+                                  <Pencil className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => handleDeleteResident(index)}
+                                  className="h-8 w-8 text-red-600"
+                                >
+                                  <Trash className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
@@ -776,8 +1026,17 @@ const PopulationStatistics: React.FC<PopulationStatisticsProps> = ({
                 ) : (
                   <div className="text-center py-8 bg-gray-50 rounded-lg">
                     <p className="text-gray-500">
-                      No resident records available for this barangay
+                      {searchQuery
+                        ? "No matching residents found"
+                        : "No resident records available for this barangay"}
                     </p>
+                    <Button
+                      className="mt-4 bg-green-600 hover:bg-green-700"
+                      onClick={() => setIsAddingResident(true)}
+                    >
+                      <Users className="mr-2 h-4 w-4" />
+                      Add First Resident
+                    </Button>
                   </div>
                 )}
               </div>
@@ -786,6 +1045,308 @@ const PopulationStatistics: React.FC<PopulationStatisticsProps> = ({
         </Tabs>
       </CardContent>
     </Card>
+  );
+
+  return (
+    <>
+      <Card className="w-full bg-white shadow-md">
+        {/* Card content remains the same */}
+        <CardContent>
+          <Tabs
+            value={activeTab}
+            onValueChange={setActiveTab}
+            className="w-full"
+          >
+            {/* Tabs content remains the same */}
+          </Tabs>
+        </CardContent>
+      </Card>
+
+      {/* Add Resident Dialog */}
+      <Dialog open={isAddingResident} onOpenChange={setIsAddingResident}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Add New Resident</DialogTitle>
+            <DialogDescription>
+              Enter the details of the new resident for {selectedData?.name}.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid grid-cols-2 gap-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="lastName">Last Name</Label>
+              <Input
+                id="lastName"
+                name="lastName"
+                value={residentForm.lastName}
+                onChange={handleInputChange}
+                placeholder="Last Name"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="firstName">First Name</Label>
+              <Input
+                id="firstName"
+                name="firstName"
+                value={residentForm.firstName}
+                onChange={handleInputChange}
+                placeholder="First Name"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="middleName">Middle Name</Label>
+              <Input
+                id="middleName"
+                name="middleName"
+                value={residentForm.middleName}
+                onChange={handleInputChange}
+                placeholder="Middle Name"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="extension">Extension</Label>
+              <Input
+                id="extension"
+                name="extension"
+                value={residentForm.extension}
+                onChange={handleInputChange}
+                placeholder="Jr., Sr., III, etc."
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="relationToHousehold">Relation to Household</Label>
+              <Input
+                id="relationToHousehold"
+                name="relationToHousehold"
+                value={residentForm.relationToHousehold}
+                onChange={handleInputChange}
+                placeholder="Head, Spouse, Child, etc."
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="birthday">Birthday</Label>
+              <Input
+                id="birthday"
+                name="birthday"
+                value={residentForm.birthday}
+                onChange={handleInputChange}
+                placeholder="DD/MM/YYYY"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="sex">Sex</Label>
+              <Select
+                value={residentForm.sex}
+                onValueChange={(value) => handleSelectChange("sex", value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select Sex" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Male">Male</SelectItem>
+                  <SelectItem value="Female">Female</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="civilStatus">Civil Status</Label>
+              <Input
+                id="civilStatus"
+                name="civilStatus"
+                value={residentForm.civilStatus}
+                onChange={handleInputChange}
+                placeholder="Single, Married, etc."
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">Age</Label>
+              <Input
+                id="age"
+                name="age"
+                type="number"
+                value={residentForm.age.toString()}
+                onChange={handleInputChange}
+                placeholder="Age"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="street">Street</Label>
+              <Input
+                id="street"
+                name="street"
+                value={residentForm.street}
+                onChange={handleInputChange}
+                placeholder="Street Address"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsAddingResident(false)}
+            >
+              Cancel
+            </Button>
+            <Button onClick={handleAddResident}>Add Resident</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Resident Dialog */}
+      <Dialog open={isEditingResident} onOpenChange={setIsEditingResident}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Edit Resident</DialogTitle>
+            <DialogDescription>
+              Update the details of the resident in {selectedData?.name}.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid grid-cols-2 gap-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="edit-lastName">Last Name</Label>
+              <Input
+                id="edit-lastName"
+                name="lastName"
+                value={residentForm.lastName}
+                onChange={handleInputChange}
+                placeholder="Last Name"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-firstName">First Name</Label>
+              <Input
+                id="edit-firstName"
+                name="firstName"
+                value={residentForm.firstName}
+                onChange={handleInputChange}
+                placeholder="First Name"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-middleName">Middle Name</Label>
+              <Input
+                id="edit-middleName"
+                name="middleName"
+                value={residentForm.middleName}
+                onChange={handleInputChange}
+                placeholder="Middle Name"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-extension">Extension</Label>
+              <Input
+                id="edit-extension"
+                name="extension"
+                value={residentForm.extension}
+                onChange={handleInputChange}
+                placeholder="Jr., Sr., III, etc."
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-relationToHousehold">
+                Relation to Household
+              </Label>
+              <Input
+                id="edit-relationToHousehold"
+                name="relationToHousehold"
+                value={residentForm.relationToHousehold}
+                onChange={handleInputChange}
+                placeholder="Head, Spouse, Child, etc."
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-birthday">Birthday</Label>
+              <Input
+                id="edit-birthday"
+                name="birthday"
+                value={residentForm.birthday}
+                onChange={handleInputChange}
+                placeholder="DD/MM/YYYY"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-sex">Sex</Label>
+              <Select
+                value={residentForm.sex}
+                onValueChange={(value) => handleSelectChange("sex", value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select Sex" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Male">Male</SelectItem>
+                  <SelectItem value="Female">Female</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-civilStatus">Civil Status</Label>
+              <Input
+                id="edit-civilStatus"
+                name="civilStatus"
+                value={residentForm.civilStatus}
+                onChange={handleInputChange}
+                placeholder="Single, Married, etc."
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-age">Age</Label>
+              <Input
+                id="edit-age"
+                name="age"
+                type="number"
+                value={residentForm.age.toString()}
+                onChange={handleInputChange}
+                placeholder="Age"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-street">Street</Label>
+              <Input
+                id="edit-street"
+                name="street"
+                value={residentForm.street}
+                onChange={handleInputChange}
+                placeholder="Street Address"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsEditingResident(false)}
+            >
+              Cancel
+            </Button>
+            <Button onClick={handleSaveEditedResident}>Save Changes</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the
+              resident record from the database.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDeleteResident}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 };
 

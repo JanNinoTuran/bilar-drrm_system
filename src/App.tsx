@@ -13,7 +13,7 @@ const EmergencyGuides = lazy(() => import("./pages/guides"));
 const AlertSystem = lazy(() => import("./pages/alerts"));
 const InventoryPage = lazy(() => import("./pages/inventory"));
 const NewsPage = lazy(() => import("./pages/news"));
-const NewsManagement = lazy(() => import("./pages/admin/news-management"));
+// News Management moved to dashboard
 
 function App() {
   return (
@@ -36,7 +36,7 @@ function App() {
             <Route path="/alerts" element={<AlertSystem />} />
             <Route path="/inventory" element={<InventoryPage />} />
             <Route path="/news" element={<NewsPage />} />
-            <Route path="/admin/news-management" element={<NewsManagement />} />
+            {/* News Management moved to dashboard */}
 
             {/* For Tempo routes */}
             {import.meta.env.VITE_TEMPO && <Route path="/tempobook/*" />}

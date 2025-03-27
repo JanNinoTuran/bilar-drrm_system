@@ -41,6 +41,7 @@ interface InventoryItem {
 
 interface InventoryTableProps {
   initialItems?: InventoryItem[];
+  showAllEquipment?: boolean;
 }
 
 const defaultItems: InventoryItem[] = [
@@ -148,6 +149,7 @@ const defaultItems: InventoryItem[] = [
 
 const InventoryTable: React.FC<InventoryTableProps> = ({
   initialItems = defaultItems,
+  showAllEquipment = true,
 }) => {
   const [items, setItems] = useState<InventoryItem[]>(initialItems);
   const [searchTerm, setSearchTerm] = useState("");

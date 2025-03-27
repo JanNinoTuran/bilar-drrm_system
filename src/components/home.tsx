@@ -7,6 +7,7 @@ import DRRMNewsSection from "./home/DRRMNewsSection";
 import EmergencyContactsWidget from "./resources/EmergencyContactsWidget";
 import OpenWeatherWidget from "./weather/OpenWeatherWidget";
 import MiniWeatherWidget from "./weather/MiniWeatherWidget";
+import DisasterSafetyTipsCarousel from "./home/DisasterSafetyTipsCarousel";
 import { Button } from "./ui/button";
 import {
   LogIn,
@@ -243,25 +244,16 @@ const Home: React.FC = () => {
       <main className="flex-1">
         {/* Hero Section */}
         <HeroSection />
-        {/* Feature Grid */}
-        <section className="py-12">
-          <FeatureGrid />
-        </section>
 
-        {/* DRRM News Section - New interactive section that appears on scroll */}
-        <DRRMNewsSection isAdmin={true} />
-
-        {/* Weather Forecast Section */}
-        <section className="py-12 bg-gradient-to-r from-blue-50 to-indigo-50">
+        {/* Disaster Safety Tips Carousel */}
+        <section className="py-12 bg-gray-50">
           <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold mb-8 text-center">
-              Bilar, Bohol Weather Forecast
-            </h2>
-            <div className="flex justify-center">
-              <OpenWeatherWidget lat={9.7177} lon={124.1146} city="Bilar" />
-            </div>
+            <DisasterSafetyTipsCarousel />
           </div>
         </section>
+
+        {/* DRRM News Section */}
+        <DRRMNewsSection isAdmin={true} />
 
         {/* Emergency Contacts Section */}
         <section className="py-12">

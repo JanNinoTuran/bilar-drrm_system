@@ -107,9 +107,9 @@ const Sidebar: React.FC<SidebarProps> = ({
           </Button>
 
           <Button variant="ghost" className="w-full justify-start" asChild>
-            <a href="/inventory">
-              <Package className="mr-2 h-5 w-5" />
-              Inventory
+            <a href="/dashboard#news-management">
+              <FileText className="mr-2 h-5 w-5" />
+              News Management
             </a>
           </Button>
 

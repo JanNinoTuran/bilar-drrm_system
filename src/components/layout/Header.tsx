@@ -143,28 +143,6 @@ const Header = ({
                   Alert System
                 </NavigationMenuLink>
               </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  href="/population-statistics"
-                  className={cn(
-                    "flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-100",
-                  )}
-                >
-                  <Users className="mr-2 h-4 w-4" />
-                  Population Statistics
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  href="/inventory"
-                  className={cn(
-                    "flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-100",
-                  )}
-                >
-                  <Warehouse className="mr-2 h-4 w-4" />
-                  Inventory
-                </NavigationMenuLink>
-              </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
         </nav>
@@ -302,24 +280,6 @@ const Header = ({
               >
                 <AlertTriangle className="mr-3 h-5 w-5 text-blue-500" />
                 Alert System
-              </a>
-            </li>
-            <li>
-              <a
-                href="/population-statistics"
-                className="flex items-center p-2 text-gray-700 rounded-md hover:bg-gray-100"
-              >
-                <Users className="mr-3 h-5 w-5 text-blue-500" />
-                Population Statistics
-              </a>
-            </li>
-            <li>
-              <a
-                href="/inventory"
-                className="flex items-center p-2 text-gray-700 rounded-md hover:bg-gray-100"
-              >
-                <Package className="mr-3 h-5 w-5 text-blue-500" />
-                Inventory
               </a>
             </li>
           </ul>

@@ -217,13 +217,6 @@ const DRRMNewsSection: React.FC<DRRMNewsSectionProps> = ({
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               DRRM News & Updates
             </h2>
-            {isAdmin && (
-              <Button variant="ghost" size="sm" asChild>
-                <a href="/admin/news-management">
-                  <Settings className="h-4 w-4" />
-                </a>
-              </Button>
-            )}
           </div>
           <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
             Stay informed about the latest developments, initiatives, and events
@@ -284,12 +277,6 @@ const DRRMNewsSection: React.FC<DRRMNewsSectionProps> = ({
               View All News & Updates <ArrowRight className="ml-2 h-4 w-4" />
             </a>
           </Button>
-
-          {isAdmin && (
-            <Button variant="outline" asChild>
-              <a href="/admin/news-management">Manage News</a>
-            </Button>
-          )}
         </div>
       </div>
     </section>

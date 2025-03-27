@@ -10,6 +10,7 @@ import MiniWeatherWidget from "@/components/weather/MiniWeatherWidget";
 import { useAuth } from "@/context/AuthContext";
 import { Navigate } from "react-router-dom";
 import { MapPin } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Dashboard: React.FC = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -105,7 +106,17 @@ const Dashboard: React.FC = () => {
                 <h2 className="text-lg font-semibold mb-4">
                   Current Situation
                 </h2>
-                <MapPreview />
+                <div className="h-[400px] w-full rounded-md overflow-hidden">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31544.037661609236!2d124.09460931953123!3d9.717699900000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33aa26d7b3446c8d%3A0x8586d5613e8d9f0e!2sBilar%2C%20Bohol!5e0!3m2!1sen!2sph!4v1652345678901!5m2!1sen!2sph"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen={true}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  ></iframe>
+                </div>
               </div>
             </div>
             <div>
@@ -116,8 +127,8 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
+          <div className="grid grid-cols-1 gap-6">
+            <div>
               <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                 <h2 className="text-lg font-semibold mb-4">
                   Population Statistics
@@ -126,6 +137,29 @@ const Dashboard: React.FC = () => {
                   location={user?.location || "Bilar, Bohol"}
                 />
               </div>
+            </div>
+          </div>
+
+          <div className="mt-8" id="news-management">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+              <h2 className="text-lg font-semibold mb-4">News Management</h2>
+              {isLoggedIn && (
+                <div className="mt-2">
+                  {/* Import and use the NewsEditor component */}
+                  {React.createElement(() => {
+                    const NewsEditor = React.lazy(
+                      () => import("@/components/home/NewsEditor"),
+                    );
+                    return (
+                      <React.Suspense
+                        fallback={<div>Loading News Editor...</div>}
+                      >
+                        <NewsEditor />
+                      </React.Suspense>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
         </div>
