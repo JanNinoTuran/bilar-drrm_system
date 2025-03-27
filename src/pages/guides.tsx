@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -6,7 +6,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import Sidebar from "@/components/dashboard/Sidebar";
 import {
   Download,
   Printer,
@@ -34,21 +33,6 @@ const EmergencyGuides: React.FC = () => {
 
       {/* Header */}
       <Header isLoggedIn={true} onProfileClick={() => setShowSidebar(true)} />
-
-      {/* Sidebar Overlay */}
-      {showSidebar && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-50"
-          onClick={() => setShowSidebar(false)}
-        >
-          <div
-            className="absolute top-0 right-0 h-full"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Sidebar onClose={() => setShowSidebar(false)} />
-          </div>
-        </div>
-      )}
 
       {/* Main Content */}
       <main className="flex-1 pt-24 pb-12 px-4">

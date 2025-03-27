@@ -13,6 +13,7 @@ const EmergencyGuides = lazy(() => import("./pages/guides"));
 const AlertSystem = lazy(() => import("./pages/alerts"));
 const InventoryPage = lazy(() => import("./pages/inventory"));
 const NewsPage = lazy(() => import("./pages/news"));
+const EvacuationCentersPage = lazy(() => import("./pages/evacuation-centers"));
 // News Management moved to dashboard
 
 function App() {
@@ -36,6 +37,10 @@ function App() {
             <Route path="/alerts" element={<AlertSystem />} />
             <Route path="/inventory" element={<InventoryPage />} />
             <Route path="/news" element={<NewsPage />} />
+            <Route
+              path="/evacuation-centers"
+              element={<EvacuationCentersPage />}
+            />
             {/* News Management moved to dashboard */}
 
             {/* For Tempo routes */}

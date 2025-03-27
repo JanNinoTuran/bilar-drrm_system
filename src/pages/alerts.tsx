@@ -23,6 +23,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { AlertTriangle, Bell, Droplet, Wind, AlertCircle } from "lucide-react";
+import AlertsWidget from "@/components/alerts/AlertsWidget";
+import { useAuth } from "@/context/AuthContext";
 
 interface EarlyWarningSystem {
   barangay: string;
@@ -226,6 +228,7 @@ const hazardProneAreas: HazardProneArea[] = [
 ];
 
 const AlertSystem: React.FC = () => {
+  const { isLoggedIn } = useAuth();
   const [selectedBarangay, setSelectedBarangay] = useState<string>("");
   const [selectedHazardType, setSelectedHazardType] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -296,7 +299,7 @@ const AlertSystem: React.FC = () => {
       </Helmet>
 
       {/* Header */}
-      <Header isLoggedIn={true} />
+      <Header isLoggedIn={isLoggedIn} />
 
       {/* Main Content */}
       <main className="flex-1 pt-24 pb-12 px-4">
@@ -562,6 +565,10 @@ const AlertSystem: React.FC = () => {
                 </div>
               </TabsContent>
             </Tabs>
+          </div>
+
+          <div className="mb-8">
+            <AlertsWidget maxAlerts={5} showViewAll={true} />
           </div>
         </div>
       </main>
