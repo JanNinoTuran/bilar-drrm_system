@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Helmet } from "react-helmet";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -6,6 +6,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Checkbox } from "@/components/ui/checkbox";
+import { jsPDF } from "jspdf";
 import {
   Download,
   Printer,
@@ -17,14 +19,381 @@ import {
   Wind,
   Waves,
   Flame,
+  CheckSquare,
 } from "lucide-react";
+
+interface ChecklistItem {
+  id: string;
+  text: string;
+  checked: boolean;
+}
 
 const EmergencyGuides: React.FC = () => {
   const [showSidebar, setShowSidebar] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [activeTab, setActiveTab] = useState("typhoon");
+
+  // Checklist items for each disaster type
+  const [typhoonItems, setTyphoonItems] = useState<ChecklistItem[]>([
+    {
+      id: "typhoon-1",
+      text: "Emergency food and water (3-day supply)",
+      checked: false,
+    },
+    { id: "typhoon-2", text: "Flashlight and extra batteries", checked: false },
+    { id: "typhoon-3", text: "First aid kit", checked: false },
+    {
+      id: "typhoon-4",
+      text: "Battery-powered or hand-crank radio",
+      checked: false,
+    },
+    { id: "typhoon-5", text: "Medications and medical items", checked: false },
+    {
+      id: "typhoon-6",
+      text: "Important documents in waterproof container",
+      checked: false,
+    },
+    { id: "typhoon-7", text: "Cash and coins", checked: false },
+    { id: "typhoon-8", text: "Emergency contact information", checked: false },
+    { id: "typhoon-9", text: "Whistle to signal for help", checked: false },
+    {
+      id: "typhoon-10",
+      text: "Plastic sheeting and duct tape",
+      checked: false,
+    },
+  ]);
+
+  const [floodItems, setFloodItems] = useState<ChecklistItem[]>([
+    {
+      id: "flood-1",
+      text: "Emergency food and water (3-day supply)",
+      checked: false,
+    },
+    { id: "flood-2", text: "Waterproof clothing and boots", checked: false },
+    { id: "flood-3", text: "First aid kit", checked: false },
+    {
+      id: "flood-4",
+      text: "Battery-powered or hand-crank radio",
+      checked: false,
+    },
+    { id: "flood-5", text: "Medications and medical items", checked: false },
+    {
+      id: "flood-6",
+      text: "Important documents in waterproof container",
+      checked: false,
+    },
+    { id: "flood-7", text: "Cash and coins", checked: false },
+    { id: "flood-8", text: "Emergency contact information", checked: false },
+    { id: "flood-9", text: "Whistle to signal for help", checked: false },
+    { id: "flood-10", text: "Water purification tablets", checked: false },
+  ]);
+
+  const [earthquakeItems, setEarthquakeItems] = useState<ChecklistItem[]>([
+    {
+      id: "earthquake-1",
+      text: "Emergency food and water (3-day supply)",
+      checked: false,
+    },
+    {
+      id: "earthquake-2",
+      text: "Flashlight and extra batteries",
+      checked: false,
+    },
+    { id: "earthquake-3", text: "First aid kit", checked: false },
+    {
+      id: "earthquake-4",
+      text: "Battery-powered or hand-crank radio",
+      checked: false,
+    },
+    {
+      id: "earthquake-5",
+      text: "Medications and medical items",
+      checked: false,
+    },
+    {
+      id: "earthquake-6",
+      text: "Important documents in waterproof container",
+      checked: false,
+    },
+    { id: "earthquake-7", text: "Cash and coins", checked: false },
+    {
+      id: "earthquake-8",
+      text: "Emergency contact information",
+      checked: false,
+    },
+    { id: "earthquake-9", text: "Whistle to signal for help", checked: false },
+    { id: "earthquake-10", text: "Dust mask and work gloves", checked: false },
+  ]);
+
+  const [fireItems, setFireItems] = useState<ChecklistItem[]>([
+    {
+      id: "fire-1",
+      text: "Emergency food and water (3-day supply)",
+      checked: false,
+    },
+    { id: "fire-2", text: "Flashlight and extra batteries", checked: false },
+    { id: "fire-3", text: "First aid kit", checked: false },
+    {
+      id: "fire-4",
+      text: "Battery-powered or hand-crank radio",
+      checked: false,
+    },
+    { id: "fire-5", text: "Medications and medical items", checked: false },
+    {
+      id: "fire-6",
+      text: "Important documents in fireproof container",
+      checked: false,
+    },
+    { id: "fire-7", text: "Cash and coins", checked: false },
+    { id: "fire-8", text: "Emergency contact information", checked: false },
+    { id: "fire-9", text: "Whistle to signal for help", checked: false },
+    { id: "fire-10", text: "Fire extinguisher", checked: false },
+  ]);
+
+  // Function to generate a PDF with checklist items
+  const generateChecklistPDF = (
+    disasterType: string,
+    items: ChecklistItem[],
+  ) => {
+    try {
+      const doc = new jsPDF();
+
+      // Add title
+      doc.setFontSize(18);
+      doc.setTextColor(0, 0, 0);
+      doc.text(`${disasterType} Preparedness Checklist`, 20, 20);
+
+      // Add date
+      doc.setFontSize(10);
+      doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 20, 30);
+
+      // Add checklist items
+      doc.setFontSize(12);
+      let yPosition = 40;
+
+      items.forEach((item, index) => {
+        // Draw checkbox
+        doc.rect(20, yPosition - 4, 4, 4);
+        if (item.checked) {
+          doc.setFillColor(0, 0, 0);
+          doc.rect(20, yPosition - 4, 4, 4, "F");
+        }
+
+        // Draw text
+        doc.text(`${item.text}`, 30, yPosition);
+        yPosition += 10;
+      });
+
+      // Add footer
+      doc.setFontSize(10);
+      doc.text("SALIG - Smart Assistant for Local Info and Guidance", 20, 280);
+
+      // Save the PDF
+      doc.save(`${disasterType.toLowerCase()}-preparedness-checklist.pdf`);
+    } catch (error) {
+      console.error(`Error generating ${disasterType} checklist PDF:`, error);
+      alert(
+        `Error generating ${disasterType} checklist PDF. Please try again later.`,
+      );
+    }
+  };
+
+  // Function to handle downloading a checklist
+  const handleDownloadChecklist = (disasterType: string) => {
+    try {
+      // Create a link to the PDF file in the assets/checklists directory
+      const pdfFileName = `${disasterType.toLowerCase()}-checklist.pdf`;
+      const pdfPath = `/src/assets/checklists/${pdfFileName}`;
+
+      // Create a link element
+      const link = document.createElement("a");
+      link.href = pdfPath;
+      link.download = `${disasterType} Preparedness Checklist.pdf`;
+
+      // Append to the document, click it, and remove it
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error(`Error downloading ${disasterType} checklist:`, error);
+      alert(
+        `Error downloading ${disasterType} checklist. Please try again later.`,
+      );
+    }
+  };
+
+  // Function to handle downloading a specific guide
+  const handleDownloadGuide = (guideName: string) => {
+    try {
+      // Create a link to the PDF file in the assets directory
+      const pdfFileName = `${guideName.toLowerCase()}-preparedness-guide.pdf`;
+      const pdfPath = `/src/assets/${pdfFileName}`;
+
+      // Create a link element
+      const link = document.createElement("a");
+      link.href = pdfPath;
+      link.download = `${guideName} Preparedness Guide.pdf`;
+
+      // Append to the document, click it, and remove it
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error(`Error downloading ${guideName} guide:`, error);
+      alert(`Error downloading ${guideName} guide. Please try again later.`);
+    }
+  };
+
+  // Function to handle downloading all guides
+  const handleDownloadAllGuides = () => {
+    try {
+      // Create an array of guide names
+      const guideNames = ["Typhoon", "Flood", "Earthquake", "Fire"];
+
+      // Download each guide individually
+      guideNames.forEach((guideName) => {
+        setTimeout(
+          () => {
+            handleDownloadGuide(guideName);
+          },
+          500 * guideNames.indexOf(guideName),
+        ); // Stagger downloads to prevent browser blocking
+      });
+
+      // Download all checklists
+      setTimeout(() => {
+        guideNames.forEach((guideName, index) => {
+          setTimeout(() => {
+            handleDownloadChecklist(guideName);
+          }, 500 * index);
+        });
+      }, 2000); // Wait 2 seconds after guides start downloading
+    } catch (error) {
+      console.error("Error downloading all guides:", error);
+      alert("Error downloading all guides. Please try again later.");
+    }
+  };
+
+  // Function to handle checklist item toggle
+  const handleChecklistItemToggle = (id: string, disasterType: string) => {
+    switch (disasterType) {
+      case "Typhoon":
+        setTyphoonItems((prevItems) =>
+          prevItems.map((item) =>
+            item.id === id ? { ...item, checked: !item.checked } : item,
+          ),
+        );
+        break;
+      case "Flood":
+        setFloodItems((prevItems) =>
+          prevItems.map((item) =>
+            item.id === id ? { ...item, checked: !item.checked } : item,
+          ),
+        );
+        break;
+      case "Earthquake":
+        setEarthquakeItems((prevItems) =>
+          prevItems.map((item) =>
+            item.id === id ? { ...item, checked: !item.checked } : item,
+          ),
+        );
+        break;
+      case "Fire":
+        setFireItems((prevItems) =>
+          prevItems.map((item) =>
+            item.id === id ? { ...item, checked: !item.checked } : item,
+          ),
+        );
+        break;
+      default:
+        console.error(`Unknown disaster type: ${disasterType}`);
+    }
+  };
+
+  // Function to handle printing the current guide using iframe approach
+  const handlePrintGuide = () => {
+    try {
+      // Get the current active tab to determine which PDF to print
+      const disasterType =
+        activeTab.charAt(0).toUpperCase() + activeTab.slice(1);
+
+      // Create a link to the PDF file in the assets directory
+      const pdfFileName = `${activeTab.toLowerCase()}-preparedness-guide.pdf`;
+      const pdfPath = `/src/assets/${pdfFileName}`;
+
+      // Remove any existing print frames
+      const existingFrame = document.getElementById("print-frame");
+      if (existingFrame) {
+        document.body.removeChild(existingFrame);
+      }
+
+      // Create a hidden iframe
+      const printFrame = document.createElement("iframe");
+      printFrame.id = "print-frame";
+      printFrame.style.position = "fixed";
+      printFrame.style.right = "-9999px";
+      printFrame.style.bottom = "-9999px";
+      printFrame.style.width = "800px";
+      printFrame.style.height = "600px";
+      printFrame.style.border = "0";
+      printFrame.style.opacity = "0.01";
+      document.body.appendChild(printFrame);
+
+      // Add load event listener to the iframe
+      printFrame.onload = () => {
+        try {
+          // Create a reference to the iframe's contentWindow
+          const frameWindow = printFrame.contentWindow;
+
+          if (!frameWindow) {
+            throw new Error("Could not access iframe content window");
+          }
+
+          // Set a timeout to ensure the PDF is fully loaded
+          setTimeout(() => {
+            try {
+              // Focus the iframe and print
+              frameWindow.focus();
+              frameWindow.print();
+
+              // Keep the iframe in the DOM to prevent the print dialog from closing
+              // Only remove it after a longer timeout (user has likely completed printing)
+              setTimeout(() => {
+                // Check if the iframe still exists before removing
+                const frameToRemove = document.getElementById("print-frame");
+                if (frameToRemove) {
+                  document.body.removeChild(frameToRemove);
+                }
+              }, 60000); // Keep the iframe for 1 minute to ensure print completes
+            } catch (printError) {
+              console.error(`Error during print operation:`, printError);
+              alert(`Error printing guide. Please try downloading instead.`);
+              // Clean up the iframe on error
+              document.body.removeChild(printFrame);
+            }
+          }, 2000); // Wait 2 seconds for PDF to load properly
+        } catch (frameError) {
+          console.error(`Error accessing iframe:`, frameError);
+          alert(
+            `Error preparing document for print. Please try downloading instead.`,
+          );
+          // Clean up the iframe on error
+          document.body.removeChild(printFrame);
+        }
+      };
+
+      // Set the iframe source to the PDF
+      printFrame.src = pdfPath;
+    } catch (error) {
+      console.error(`Error printing guide:`, error);
+      alert(`Error printing guide. Please try downloading instead.`);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Helmet>
-        <title>Emergency Guides | L.I.G.T.A.S.</title>
+        <title>Emergency Guides | SALIG</title>
         <meta
           name="description"
           content="Step-by-step emergency preparedness guides and checklists for various disaster scenarios"
@@ -42,18 +411,26 @@ const EmergencyGuides: React.FC = () => {
               Emergency Preparedness Guides
             </h1>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={handlePrintGuide}>
                 <Printer className="h-4 w-4 mr-2" />
-                Print
+                Print Current Guide
               </Button>
-              <Button variant="outline" size="sm">
+              <Button
+                variant="default"
+                size="sm"
+                onClick={handleDownloadAllGuides}
+              >
                 <Download className="h-4 w-4 mr-2" />
-                Download All
+                Download All Guides
               </Button>
             </div>
           </div>
 
-          <Tabs defaultValue="typhoon" className="w-full">
+          <Tabs
+            defaultValue="typhoon"
+            className="w-full"
+            onValueChange={(value) => setActiveTab(value)}
+          >
             <TabsList className="grid grid-cols-4 mb-8">
               <TabsTrigger value="typhoon" className="flex items-center gap-2">
                 <Wind className="h-4 w-4" />
@@ -77,7 +454,7 @@ const EmergencyGuides: React.FC = () => {
             </TabsList>
 
             {/* Typhoon Guide */}
-            <TabsContent value="typhoon" className="space-y-6">
+            <TabsContent value="typhoon" className="space-y-6" ref={contentRef}>
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -166,18 +543,63 @@ const EmergencyGuides: React.FC = () => {
                       </ul>
                     </div>
 
-                    <div className="flex justify-between mt-6">
-                      <Button variant="outline">
-                        <Download className="h-4 w-4 mr-2" />
-                        Download Checklist
-                      </Button>
-                      <div className="flex gap-2">
-                        <Button variant="ghost" size="icon">
-                          <Printer className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="icon">
-                          <Share2 className="h-4 w-4" />
-                        </Button>
+                    <div className="mt-6">
+                      <h3 className="text-lg font-semibold mb-2 flex items-center">
+                        <CheckSquare className="h-5 w-5 text-blue-600 mr-2" />
+                        Typhoon Preparedness Checklist
+                      </h3>
+                      <div className="space-y-2 mb-4">
+                        {typhoonItems.map((item) => (
+                          <div
+                            key={item.id}
+                            className="flex items-center space-x-2"
+                          >
+                            <Checkbox
+                              id={item.id}
+                              checked={item.checked}
+                              onCheckedChange={() =>
+                                handleChecklistItemToggle(item.id, "Typhoon")
+                              }
+                            />
+                            <label
+                              htmlFor={item.id}
+                              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            >
+                              {item.text}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="flex justify-between mt-6">
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            onClick={() => handleDownloadChecklist("Typhoon")}
+                          >
+                            <Download className="h-4 w-4 mr-2" />
+                            Download Checklist
+                          </Button>
+                          <Button
+                            variant="default"
+                            onClick={() => handleDownloadGuide("Typhoon")}
+                          >
+                            <BookOpen className="h-4 w-4 mr-2" />
+                            Download Full Guide
+                          </Button>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={handlePrintGuide}
+                          >
+                            <Printer className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="icon">
+                            <Share2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -226,7 +648,7 @@ const EmergencyGuides: React.FC = () => {
             </TabsContent>
 
             {/* Flood Guide */}
-            <TabsContent value="flood" className="space-y-6">
+            <TabsContent value="flood" className="space-y-6" ref={contentRef}>
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -308,18 +730,63 @@ const EmergencyGuides: React.FC = () => {
                       </ul>
                     </div>
 
-                    <div className="flex justify-between mt-6">
-                      <Button variant="outline">
-                        <Download className="h-4 w-4 mr-2" />
-                        Download Checklist
-                      </Button>
-                      <div className="flex gap-2">
-                        <Button variant="ghost" size="icon">
-                          <Printer className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="icon">
-                          <Share2 className="h-4 w-4" />
-                        </Button>
+                    <div className="mt-6">
+                      <h3 className="text-lg font-semibold mb-2 flex items-center">
+                        <CheckSquare className="h-5 w-5 text-blue-600 mr-2" />
+                        Flood Preparedness Checklist
+                      </h3>
+                      <div className="space-y-2 mb-4">
+                        {floodItems.map((item) => (
+                          <div
+                            key={item.id}
+                            className="flex items-center space-x-2"
+                          >
+                            <Checkbox
+                              id={item.id}
+                              checked={item.checked}
+                              onCheckedChange={() =>
+                                handleChecklistItemToggle(item.id, "Flood")
+                              }
+                            />
+                            <label
+                              htmlFor={item.id}
+                              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            >
+                              {item.text}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="flex justify-between mt-6">
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            onClick={() => handleDownloadChecklist("Flood")}
+                          >
+                            <Download className="h-4 w-4 mr-2" />
+                            Download Checklist
+                          </Button>
+                          <Button
+                            variant="default"
+                            onClick={() => handleDownloadGuide("Flood")}
+                          >
+                            <BookOpen className="h-4 w-4 mr-2" />
+                            Download Full Guide
+                          </Button>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={handlePrintGuide}
+                          >
+                            <Printer className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="icon">
+                            <Share2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -328,7 +795,11 @@ const EmergencyGuides: React.FC = () => {
             </TabsContent>
 
             {/* Earthquake Guide */}
-            <TabsContent value="earthquake" className="space-y-6">
+            <TabsContent
+              value="earthquake"
+              className="space-y-6"
+              ref={contentRef}
+            >
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -414,18 +885,65 @@ const EmergencyGuides: React.FC = () => {
                       </ul>
                     </div>
 
-                    <div className="flex justify-between mt-6">
-                      <Button variant="outline">
-                        <Download className="h-4 w-4 mr-2" />
-                        Download Checklist
-                      </Button>
-                      <div className="flex gap-2">
-                        <Button variant="ghost" size="icon">
-                          <Printer className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="icon">
-                          <Share2 className="h-4 w-4" />
-                        </Button>
+                    <div className="mt-6">
+                      <h3 className="text-lg font-semibold mb-2 flex items-center">
+                        <CheckSquare className="h-5 w-5 text-orange-600 mr-2" />
+                        Earthquake Preparedness Checklist
+                      </h3>
+                      <div className="space-y-2 mb-4">
+                        {earthquakeItems.map((item) => (
+                          <div
+                            key={item.id}
+                            className="flex items-center space-x-2"
+                          >
+                            <Checkbox
+                              id={item.id}
+                              checked={item.checked}
+                              onCheckedChange={() =>
+                                handleChecklistItemToggle(item.id, "Earthquake")
+                              }
+                            />
+                            <label
+                              htmlFor={item.id}
+                              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            >
+                              {item.text}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="flex justify-between mt-6">
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            onClick={() =>
+                              handleDownloadChecklist("Earthquake")
+                            }
+                          >
+                            <Download className="h-4 w-4 mr-2" />
+                            Download Checklist
+                          </Button>
+                          <Button
+                            variant="default"
+                            onClick={() => handleDownloadGuide("Earthquake")}
+                          >
+                            <BookOpen className="h-4 w-4 mr-2" />
+                            Download Full Guide
+                          </Button>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={handlePrintGuide}
+                          >
+                            <Printer className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="icon">
+                            <Share2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -434,7 +952,7 @@ const EmergencyGuides: React.FC = () => {
             </TabsContent>
 
             {/* Fire Guide */}
-            <TabsContent value="fire" className="space-y-6">
+            <TabsContent value="fire" className="space-y-6" ref={contentRef}>
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -514,18 +1032,63 @@ const EmergencyGuides: React.FC = () => {
                       </ul>
                     </div>
 
-                    <div className="flex justify-between mt-6">
-                      <Button variant="outline">
-                        <Download className="h-4 w-4 mr-2" />
-                        Download Checklist
-                      </Button>
-                      <div className="flex gap-2">
-                        <Button variant="ghost" size="icon">
-                          <Printer className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="icon">
-                          <Share2 className="h-4 w-4" />
-                        </Button>
+                    <div className="mt-6">
+                      <h3 className="text-lg font-semibold mb-2 flex items-center">
+                        <CheckSquare className="h-5 w-5 text-red-600 mr-2" />
+                        Fire Preparedness Checklist
+                      </h3>
+                      <div className="space-y-2 mb-4">
+                        {fireItems.map((item) => (
+                          <div
+                            key={item.id}
+                            className="flex items-center space-x-2"
+                          >
+                            <Checkbox
+                              id={item.id}
+                              checked={item.checked}
+                              onCheckedChange={() =>
+                                handleChecklistItemToggle(item.id, "Fire")
+                              }
+                            />
+                            <label
+                              htmlFor={item.id}
+                              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            >
+                              {item.text}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="flex justify-between mt-6">
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            onClick={() => handleDownloadChecklist("Fire")}
+                          >
+                            <Download className="h-4 w-4 mr-2" />
+                            Download Checklist
+                          </Button>
+                          <Button
+                            variant="default"
+                            onClick={() => handleDownloadGuide("Fire")}
+                          >
+                            <BookOpen className="h-4 w-4 mr-2" />
+                            Download Full Guide
+                          </Button>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={handlePrintGuide}
+                          >
+                            <Printer className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="icon">
+                            <Share2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>

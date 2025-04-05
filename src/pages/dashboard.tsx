@@ -6,6 +6,7 @@ import AlertsWidget from "@/components/alerts/AlertsWidget";
 import MapPreview from "@/components/map/MapPreview";
 import PopulationStatistics from "@/components/dashboard/PopulationStatistics";
 import Sidebar from "@/components/dashboard/Sidebar";
+import FloatingAIAssistant from "@/components/dashboard/FloatingAIAssistant";
 import MiniWeatherWidget from "@/components/weather/MiniWeatherWidget";
 import { useAuth } from "@/context/AuthContext";
 import { Navigate } from "react-router-dom";
@@ -119,7 +120,7 @@ const Dashboard: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div>
+            <div className="space-y-6">
               <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                 <h2 className="text-lg font-semibold mb-4">Active Alerts</h2>
                 <AlertsWidget maxAlerts={3} />
@@ -164,6 +165,9 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </main>
+
+      {/* Floating AI Assistant */}
+      <FloatingAIAssistant />
 
       {/* Footer */}
       <Footer />

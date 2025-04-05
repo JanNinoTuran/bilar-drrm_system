@@ -227,8 +227,8 @@ const hazardProneAreas: HazardProneArea[] = [
   },
 ];
 
-const AlertSystem: React.FC = () => {
-  const { isLoggedIn } = useAuth();
+const AlertSystem = () => {
+  const { isLoggedIn = false } = useAuth();
   const [selectedBarangay, setSelectedBarangay] = useState<string>("");
   const [selectedHazardType, setSelectedHazardType] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");

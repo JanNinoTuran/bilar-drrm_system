@@ -33,7 +33,7 @@ const Footer = ({ className }: FooterProps = {}) => {
   return (
     <footer className={cn("w-full bg-slate-900 text-white", className)}>
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Column 1: Logo and About */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
@@ -175,36 +175,6 @@ const Footer = ({ className }: FooterProps = {}) => {
                 </div>
               </li>
             </ul>
-          </div>
-
-          {/* Column 4: Newsletter */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Stay Updated</h3>
-            <p className="text-slate-300 text-sm">
-              Subscribe to our newsletter for the latest alerts and safety tips.
-            </p>
-            <form className="space-y-2">
-              <div className="flex flex-col space-y-2">
-                <input
-                  type="email"
-                  placeholder="Your email address"
-                  className="px-4 py-2 bg-slate-800 border border-slate-700 rounded-md text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-                  Subscribe
-                </Button>
-              </div>
-            </form>
-            <div className="pt-2">
-              <p className="text-xs text-slate-400">
-                By subscribing, you agree to our{" "}
-                <a href="#" className="text-blue-400 hover:underline">
-                  Privacy Policy
-                </a>
-                .
-              </p>
-            </div>
           </div>
         </div>
 

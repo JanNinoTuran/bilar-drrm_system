@@ -14,7 +14,6 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
   Bell,
   Menu,
-  Search,
   User,
   LogIn,
   MapPin,
@@ -24,8 +23,14 @@ import {
   Package,
   Home,
   Warehouse,
+  FileText,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface HeaderProps {
   isLoggedIn?: boolean;
@@ -42,7 +47,6 @@ const Header = ({
   onMenuToggle = () => {},
   onProfileClick = () => {},
 }: HeaderProps) => {
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Get auth context
@@ -58,17 +62,13 @@ const Header = ({
       : user.email.split("@")[0]
     : propUserName;
 
-  const toggleSearch = () => {
-    setIsSearchOpen(!isSearchOpen);
-  };
-
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
     onMenuToggle();
   };
 
   return (
-    <header className="w-full h-20 bg-white border-b border-gray-200 shadow-sm fixed top-0 left-0 z-50">
+    <header className="w-full h-20 bg-white border-b border-gray-200 shadow-md fixed top-0 left-0 z-50">
       <div className="container mx-auto h-full px-4 flex items-center justify-between">
         {/* Logo and Brand */}
         <div className="flex items-center">
@@ -96,14 +96,14 @@ const Header = ({
         </div>
 
         {/* Main Navigation - Desktop */}
-        <nav className="hidden md:flex items-center space-x-1 flex-shrink-0">
+        <nav className="hidden md:flex items-center space-x-2 flex-shrink-0">
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
                 <NavigationMenuLink
                   href="/dashboard"
                   className={cn(
-                    "flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-100",
+                    "flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-100 transition-colors duration-200",
                   )}
                 >
                   <Home className="mr-2 h-4 w-4" />
@@ -114,7 +114,7 @@ const Header = ({
                 <NavigationMenuLink
                   href="/map"
                   className={cn(
-                    "flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-100",
+                    "flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-100 transition-colors duration-200",
                   )}
                 >
                   <MapPin className="mr-2 h-4 w-4" />
@@ -125,7 +125,7 @@ const Header = ({
                 <NavigationMenuLink
                   href="/guides"
                   className={cn(
-                    "flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-100",
+                    "flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-100 transition-colors duration-200",
                   )}
                 >
                   <BookOpen className="mr-2 h-4 w-4" />
@@ -136,7 +136,7 @@ const Header = ({
                 <NavigationMenuLink
                   href="/alerts"
                   className={cn(
-                    "flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-100",
+                    "flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-100 transition-colors duration-200",
                   )}
                 >
                   <AlertTriangle className="mr-2 h-4 w-4" />
@@ -147,11 +147,22 @@ const Header = ({
                 <NavigationMenuLink
                   href="/evacuation-centers"
                   className={cn(
-                    "flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-100",
+                    "flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-100 transition-colors duration-200",
                   )}
                 >
                   <Warehouse className="mr-2 h-4 w-4" />
                   Evacuation Centers
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  href="/reports"
+                  className={cn(
+                    "flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-100 transition-colors duration-200",
+                  )}
+                >
+                  <FileText className="mr-2 h-4 w-4" />
+                  Submit Report
                 </NavigationMenuLink>
               </NavigationMenuItem>
             </NavigationMenuList>
@@ -160,39 +171,91 @@ const Header = ({
 
         {/* User Controls */}
         <div className="flex items-center space-x-2">
-          <div
-            className={cn(
-              "transition-all duration-300 overflow-hidden",
-              isSearchOpen ? "w-64" : "w-0",
-            )}
-            style={{ flexShrink: 0 }}
-          >
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search..."
-                className="w-full pl-10 pr-4 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-          </div>
-
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleSearch}
-            aria-label="Search"
-          >
-            <Search className="h-5 w-5" />
-          </Button>
-
-          <Button variant="ghost" size="icon" aria-label="Notifications">
-            <Bell className="h-5 w-5" />
-          </Button>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Notifications"
+                className="relative hover:bg-blue-50 transition-colors duration-200"
+              >
+                <Bell className="h-5 w-5" />
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                  3
+                </span>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80 p-0" align="end">
+              <div className="border-b border-gray-200 p-3 bg-blue-50">
+                <h3 className="font-semibold text-blue-700">Notifications</h3>
+                <p className="text-xs text-gray-500">
+                  You have 3 unread notifications
+                </p>
+              </div>
+              <div className="max-h-80 overflow-y-auto">
+                <div className="p-3 border-b border-gray-100 hover:bg-gray-50 cursor-pointer">
+                  <div className="flex items-start gap-3">
+                    <div className="bg-amber-100 p-2 rounded-full">
+                      <AlertTriangle className="h-4 w-4 text-amber-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">Flood Warning</p>
+                      <p className="text-xs text-gray-500">
+                        Flash flood warning for Bilar area. Seek higher ground
+                        immediately.
+                      </p>
+                      <p className="text-xs text-gray-400 mt-1">
+                        10 minutes ago
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-3 border-b border-gray-100 hover:bg-gray-50 cursor-pointer">
+                  <div className="flex items-start gap-3">
+                    <div className="bg-blue-100 p-2 rounded-full">
+                      <MapPin className="h-4 w-4 text-blue-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">
+                        Evacuation Center Update
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        Bilar Central School evacuation center is now open.
+                      </p>
+                      <p className="text-xs text-gray-400 mt-1">1 hour ago</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-3 border-b border-gray-100 hover:bg-gray-50 cursor-pointer">
+                  <div className="flex items-start gap-3">
+                    <div className="bg-green-100 p-2 rounded-full">
+                      <BookOpen className="h-4 w-4 text-green-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">New Emergency Guide</p>
+                      <p className="text-xs text-gray-500">
+                        New guide for landslide safety has been published.
+                      </p>
+                      <p className="text-xs text-gray-400 mt-1">2 days ago</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="p-2 border-t border-gray-200">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="w-full text-blue-600 text-xs"
+                >
+                  View all notifications
+                </Button>
+              </div>
+            </PopoverContent>
+          </Popover>
 
           {isLoggedIn ? (
             <div
-              className="flex items-center space-x-2 cursor-pointer"
+              className="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity duration-200"
               onClick={onProfileClick}
             >
               <Avatar>
@@ -212,7 +275,12 @@ const Header = ({
               </span>
             </div>
           ) : (
-            <Button variant="default" size="sm" className="ml-2" asChild>
+            <Button
+              variant="default"
+              size="sm"
+              className="ml-2 shadow-sm hover:shadow transition-all duration-200"
+              asChild
+            >
               <a href="/login">
                 <LogIn className="mr-2 h-4 w-4" />
                 Sign In
@@ -300,6 +368,15 @@ const Header = ({
               >
                 <Warehouse className="mr-3 h-5 w-5 text-blue-500" />
                 Evacuation Centers
+              </a>
+            </li>
+            <li>
+              <a
+                href="/reports"
+                className="flex items-center p-2 text-gray-700 rounded-md hover:bg-gray-100"
+              >
+                <FileText className="mr-3 h-5 w-5 text-blue-500" />
+                Submit Report
               </a>
             </li>
           </ul>

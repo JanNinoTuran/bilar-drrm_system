@@ -1,12 +1,12 @@
 import React from "react";
 import { Helmet } from "react-helmet";
-import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import SignUpForm from "@/components/auth/SignUpForm";
+import { MapPin, Route, MessageCircle, BookOpen, Bell } from "lucide-react";
 
 const SignUpPage: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50 to-gray-100">
       <Helmet>
         <title>Sign Up | L.I.G.T.A.S.</title>
         <meta
@@ -15,108 +15,57 @@ const SignUpPage: React.FC = () => {
         />
       </Helmet>
 
-      {/* Header removed */}
-
       {/* Main Content */}
       <main className="flex-1 flex items-center justify-center px-4 py-12">
-        <div className="w-full max-w-4xl grid md:grid-cols-2 gap-8 items-center">
+        <div className="w-full max-w-5xl grid md:grid-cols-2 gap-8 items-center">
           <div className="hidden md:block">
-            <div className="p-6 bg-blue-600 text-white rounded-lg">
-              <h2 className="text-2xl font-bold mb-4">Join Our Community</h2>
-              <p className="mb-4">
+            <div className="p-8 bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-xl shadow-lg">
+              <h2 className="text-3xl font-bold mb-6">Join Our Community</h2>
+              <p className="mb-6 text-blue-100 leading-relaxed">
                 Create an account to receive personalized disaster alerts and
                 access critical resources for your location.
               </p>
-              <h3 className="text-lg font-semibold mb-2">
+              <h3 className="text-xl font-semibold mb-4 text-blue-50">
                 Benefits of joining:
               </h3>
-              <ul className="space-y-2">
+              <ul className="space-y-4">
                 <li className="flex items-center">
-                  <svg
-                    className="h-5 w-5 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M5 13l4 4L19 7"
-                    ></path>
-                  </svg>
-                  Personalized location-based alerts
+                  <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center mr-3 shadow-inner">
+                    <MapPin className="h-4 w-4 text-white" />
+                  </div>
+                  <span>Personalized location-based alerts</span>
                 </li>
                 <li className="flex items-center">
-                  <svg
-                    className="h-5 w-5 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M5 13l4 4L19 7"
-                    ></path>
-                  </svg>
-                  Save evacuation routes and emergency contacts
+                  <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center mr-3 shadow-inner">
+                    <Route className="h-4 w-4 text-white" />
+                  </div>
+                  <span>Save evacuation routes and emergency contacts</span>
                 </li>
                 <li className="flex items-center">
-                  <svg
-                    className="h-5 w-5 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M5 13l4 4L19 7"
-                    ></path>
-                  </svg>
-                  Participate in community forums
+                  <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center mr-3 shadow-inner">
+                    <MessageCircle className="h-4 w-4 text-white" />
+                  </div>
+                  <span>Participate in community forums</span>
                 </li>
                 <li className="flex items-center">
-                  <svg
-                    className="h-5 w-5 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M5 13l4 4L19 7"
-                    ></path>
-                  </svg>
-                  Access to premium preparedness guides
+                  <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center mr-3 shadow-inner">
+                    <BookOpen className="h-4 w-4 text-white" />
+                  </div>
+                  <span>Access to premium preparedness guides</span>
                 </li>
                 <li className="flex items-center">
-                  <svg
-                    className="h-5 w-5 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M5 13l4 4L19 7"
-                    ></path>
-                  </svg>
-                  Receive emergency notifications via SMS and email
+                  <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center mr-3 shadow-inner">
+                    <Bell className="h-4 w-4 text-white" />
+                  </div>
+                  <span>Receive emergency notifications via SMS and email</span>
                 </li>
               </ul>
+              <div className="mt-8 pt-6 border-t border-blue-500">
+                <p className="text-blue-100 text-sm">
+                  Join over 5,000 residents in Bohol who rely on L.I.G.T.A.S.
+                  for critical disaster information and emergency preparedness.
+                </p>
+              </div>
             </div>
           </div>
 
